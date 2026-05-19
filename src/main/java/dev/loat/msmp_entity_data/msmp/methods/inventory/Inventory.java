@@ -71,10 +71,11 @@ public class Inventory {
                         ItemStack stack = inv.getItem(slot);
                         if (stack.isEmpty()) continue;
 
+                        final int finalSlot = slot;
                         JsonElement itemJson = ItemStack.CODEC
                             .encodeStart(server.registryAccess().createSerializationContext(JsonOps.INSTANCE), stack)
                             .getOrThrow(err -> new IllegalStateException(
-                                "Failed to serialize item in slot %d: %s".formatted(slot, err)
+                                "Failed to serialize item in slot %d: %s".formatted(finalSlot, err)
                             ));
 
                         JsonObject entry = itemJson.getAsJsonObject().deepCopy();
