@@ -24,6 +24,9 @@ import java.util.List;
  */
 public record PositionResponse(EntityRef entity, List<Double> position) {
 
+    private static final Schema<List<Double>> POSITION_SCHEMA =
+        Schema.ofType("array", Codec.DOUBLE.listOf());
+
     /**
      * Codec for serializing and deserializing {@link PositionResponse} instances.
      */
@@ -37,5 +40,5 @@ public record PositionResponse(EntityRef entity, List<Double> position) {
      */
     public static final Schema<PositionResponse> SCHEMA = Schema.record(CODEC)
         .withField("entity", EntityRef.SCHEMA)
-        .withField("position", Schema.ARRAY_SCHEMA);
+        .withField("position", POSITION_SCHEMA);
 }
