@@ -3,7 +3,7 @@
   "id": "msmp-entity-data",
   "version": "${version}",
   "name": "MSMP Entity Data",
-  "description": "This Minecraft Fabric Mod Extends the Minecraft Server Management Protocol (MSMP) forwarding every server console log event to all connected clients as a JSON-RPC 2.0 notification.",
+  "description": "Extends the Minecraft Server Management Protocol (MSMP) by providing additional functions for querying and setting entity data",
   "authors": [],
   "contact": {},
   "license": "LGPL-3.0-only",
