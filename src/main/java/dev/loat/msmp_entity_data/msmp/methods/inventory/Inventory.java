@@ -1,15 +1,16 @@
 package dev.loat.msmp_entity_data.msmp.methods.inventory;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity_data.logging.Logger;
 import dev.loat.msmp_entity_data.msmp.components.EntityRequest;
 import dev.loat.msmp_entity_data.msmp.components.EntityResolver;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+
 
 /**
  * Registers the {@code entity_data:inventory} MSMP method.
@@ -48,9 +49,9 @@ public class Inventory {
      * Registers the {@code entity_data:inventory} method on the given {@link MSMPNamespace}.
      *
      * <p>Entity lookup is delegated to {@link EntityResolver#resolvePlayer} since only
-     * players have an inventory. The full inventory is serialized via
-     * {@link ContainerHelper#saveAllItems} to NBT, then converted to JSON via
-     * {@link NbtOps}, matching the Vanilla {@code /data get entity @s Inventory} format.</p>
+     * players have an inventory. Each occupied slot is serialized via {@link ItemStack#CODEC}
+     * with {@link JsonOps#INSTANCE}, then the {@code Slot} key is injected to match the
+     * Vanilla NBT format. Empty slots are omitted.</p>
      *
      * @param namespace The namespace to register this method under
      */
@@ -62,10 +63,24 @@ public class Inventory {
             (server, params, client) -> {
                 try {
                     Player player = EntityResolver.resolvePlayer(server, params);
+                    net.minecraft.world.entity.player.Inventory inv = player.getInventory();
 
-                    ListTag nbt = new ListTag();
-                    ContainerHelper.saveAllItems(nbt, player.getInventory(), server.registryAccess());
-                    JsonElement inventory = NbtOps.INSTANCE.convertTo(JsonOps.INSTANCE, nbt);
+                    JsonArray inventory = new JsonArray();
+
+                    for (int slot = 0; slot < inv.getContainerSize(); slot++) {
+                        ItemStack stack = inv.getItem(slot);
+                        if (stack.isEmpty()) continue;
+
+                        JsonElement itemJson = ItemStack.CODEC
+                            .encodeStart(server.registryAccess().createSerializationContext(JsonOps.INSTANCE), stack)
+                            .getOrThrow(err -> new IllegalStateException(
+                                "Failed to serialize item in slot %d: %s".formatted(slot, err)
+                            ));
+
+                        JsonObject entry = itemJson.getAsJsonObject().deepCopy();
+                        entry.addProperty("Slot", slot);
+                        inventory.add(entry);
+                    }
 
                     return new InventoryResponse(EntityResolver.toEntityRef(player), inventory);
                 } catch (IllegalArgumentException e) {
