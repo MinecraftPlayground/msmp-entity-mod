@@ -27,6 +27,9 @@ public record PositionSetRequest(
     List<Double> position
 ) implements EntityLookup {
 
+    private static final Schema<List<Double>> POSITION_SCHEMA =
+        Schema.ofType("array", Codec.DOUBLE.listOf());
+
     /**
      * Codec for serializing and deserializing {@link PositionSetRequest} instances.
      */
@@ -42,5 +45,5 @@ public record PositionSetRequest(
     public static final Schema<PositionSetRequest> SCHEMA = Schema.record(CODEC)
         .withField("id", Schema.STRING_SCHEMA)
         .withField("name", Schema.STRING_SCHEMA)
-        .withField("position", Schema.ARRAY_SCHEMA);
+        .withField("position", POSITION_SCHEMA);
 }
