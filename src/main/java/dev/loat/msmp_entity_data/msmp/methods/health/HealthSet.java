@@ -3,7 +3,6 @@ package dev.loat.msmp_entity_data.msmp.methods.health;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity_data.logging.Logger;
 import dev.loat.msmp_entity_data.msmp.components.EntityResolver;
-import dev.loat.msmp_entity_data.msmp.methods.health.HealthResponse;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -37,6 +36,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
  * }</pre>
  */
 public class HealthSet {
+
+    private HealthSet() {}
 
     /**
      * Registers the {@code entity_data:health/set} method on the given {@link MSMPNamespace}.

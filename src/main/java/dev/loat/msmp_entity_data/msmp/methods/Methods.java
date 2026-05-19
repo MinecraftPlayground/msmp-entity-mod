@@ -11,6 +11,8 @@ import dev.loat.msmp_entity_data.msmp.methods.position.Position;
 import dev.loat.msmp_entity_data.msmp.methods.position.PositionSet;
 import dev.loat.msmp_entity_data.msmp.methods.rotation.Rotation;
 import dev.loat.msmp_entity_data.msmp.methods.rotation.RotationSet;
+import dev.loat.msmp_entity_data.msmp.methods.saturation.Saturation;
+import dev.loat.msmp_entity_data.msmp.methods.saturation.SaturationSet;
 import dev.loat.msmp_entity_data.msmp.methods.uuid.UUID;
 
 
@@ -41,6 +43,8 @@ public class Methods {
         PositionSet.register(namespace);
         Rotation.register(namespace);
         RotationSet.register(namespace);
+        Saturation.register(namespace);
+        SaturationSet.register(namespace);
         UUID.register(namespace);
     }
 }

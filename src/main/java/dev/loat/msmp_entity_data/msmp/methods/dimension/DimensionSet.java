@@ -3,7 +3,6 @@ package dev.loat.msmp_entity_data.msmp.methods.dimension;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity_data.logging.Logger;
 import dev.loat.msmp_entity_data.msmp.components.EntityResolver;
-import dev.loat.msmp_entity_data.msmp.methods.dimension.DimensionResponse;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -27,6 +26,8 @@ import net.minecraft.world.level.Level;
  * }</pre>
  */
 public class DimensionSet {
+
+    private DimensionSet() {}
 
     /**
      * Registers the {@code entity_data:dimension/set} method on the given {@link MSMPNamespace}.

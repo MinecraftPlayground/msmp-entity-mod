@@ -45,6 +45,8 @@ import net.minecraft.world.item.ItemStack;
  */
 public class Inventory {
 
+    private Inventory() {}
+
     /**
      * Registers the {@code entity_data:inventory} method on the given {@link MSMPNamespace}.
      *

@@ -26,6 +26,8 @@ import net.minecraft.world.entity.Entity;
  */
 public class Dimension {
 
+    private Dimension() {}
+
     /**
      * Registers the {@code entity_data:dimension} method on the given {@link MSMPNamespace}.
      *

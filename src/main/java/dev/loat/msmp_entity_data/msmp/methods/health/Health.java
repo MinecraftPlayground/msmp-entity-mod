@@ -33,6 +33,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
  */
 public class Health {
 
+    private Health() {}
+
     /**
      * Registers the {@code entity_data:health} method on the given {@link MSMPNamespace}.
      *

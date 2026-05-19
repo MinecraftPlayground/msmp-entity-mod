@@ -27,6 +27,8 @@ import java.util.List;
  */
 public class Position {
 
+    private Position() {}
+
     /**
      * Registers the {@code entity_data:position} method on the given {@link MSMPNamespace}.
      *

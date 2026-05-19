@@ -3,7 +3,6 @@ package dev.loat.msmp_entity_data.msmp.methods.position;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity_data.logging.Logger;
 import dev.loat.msmp_entity_data.msmp.components.EntityResolver;
-import dev.loat.msmp_entity_data.msmp.methods.position.PositionResponse;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 
@@ -26,6 +25,8 @@ import java.util.List;
  * }</pre>
  */
 public class PositionSet {
+
+    private PositionSet() {}
 
     /**
      * Registers the {@code entity_data:position/set} method on the given {@link MSMPNamespace}.

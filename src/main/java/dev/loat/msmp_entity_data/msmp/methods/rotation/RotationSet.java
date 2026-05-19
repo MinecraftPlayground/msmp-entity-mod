@@ -3,7 +3,6 @@ package dev.loat.msmp_entity_data.msmp.methods.rotation;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity_data.logging.Logger;
 import dev.loat.msmp_entity_data.msmp.components.EntityResolver;
-import dev.loat.msmp_entity_data.msmp.methods.rotation.RotationResponse;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 
@@ -27,6 +26,8 @@ import java.util.List;
  * }</pre>
  */
 public class RotationSet {
+
+    private RotationSet() {}
 
     /**
      * Registers the {@code entity_data:rotation/set} method on the given {@link MSMPNamespace}.

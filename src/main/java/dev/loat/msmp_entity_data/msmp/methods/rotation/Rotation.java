@@ -28,6 +28,8 @@ import java.util.List;
  */
 public class Rotation {
 
+    private Rotation() {}
+
     /**
      * Registers the {@code entity_data:rotation} method on the given {@link MSMPNamespace}.
      *
