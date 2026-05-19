@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity_data.msmp.methods.inventory;
+package dev.loat.msmp_entity_data.msmp.methods.inventory.set;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
@@ -46,6 +46,9 @@ public record InventorySetRequest(
         json -> new Dynamic<>(JsonOps.INSTANCE, json)
     );
 
+    private static final Schema<JsonElement> INVENTORY_SCHEMA =
+        Schema.ofType("array", JSON_ELEMENT_CODEC);
+
     /**
      * Codec for serializing and deserializing {@link InventorySetRequest} instances.
      */
@@ -61,5 +64,5 @@ public record InventorySetRequest(
     public static final Schema<InventorySetRequest> SCHEMA = Schema.record(CODEC)
         .withField("id", Schema.STRING_SCHEMA)
         .withField("name", Schema.STRING_SCHEMA)
-        .withField("inventory", Schema.arrayOf(Schema.record(Codec.unit(null)), JSON_ELEMENT_CODEC));
+        .withField("inventory", INVENTORY_SCHEMA);
 }
