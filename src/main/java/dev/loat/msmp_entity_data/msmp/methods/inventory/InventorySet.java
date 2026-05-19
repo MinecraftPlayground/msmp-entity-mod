@@ -63,13 +63,14 @@ public class InventorySet {
             InventoryResponse.SCHEMA,
             "Partially updates an online player's inventory using a diff approach",
             (server, params, client) -> {
+                InventorySetRequest req = params;
                 try {
-                    Player player = EntityResolver.resolvePlayer(server, params);
+                    Player player = EntityResolver.resolvePlayer(server, req);
                     net.minecraft.world.entity.player.Inventory inv = player.getInventory();
                     int containerSize = inv.getContainerSize();
                     var ctx = server.registryAccess().createSerializationContext(JsonOps.INSTANCE);
 
-                    for (JsonElement element : params.inventory().getAsJsonArray()) {
+                    for (JsonElement element : req.inventory().getAsJsonArray()) {
                         if (!element.isJsonObject()) {
                             throw new IllegalArgumentException("Each inventory entry must be a JSON object");
                         }
@@ -105,10 +106,11 @@ public class InventorySet {
                         ItemStack stack = inv.getItem(slot);
                         if (stack.isEmpty()) continue;
 
+                        final int finalSlot = slot;
                         JsonElement itemJson = ItemStack.CODEC
                             .encodeStart(ctx, stack)
                             .getOrThrow(err -> new IllegalStateException(
-                                "Failed to serialize item in slot %d: %s".formatted(slot, err)
+                                "Failed to serialize item in slot %d: %s".formatted(finalSlot, err)
                             ));
 
                         JsonObject responseEntry = itemJson.getAsJsonObject().deepCopy();
