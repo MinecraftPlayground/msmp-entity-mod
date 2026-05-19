@@ -24,6 +24,9 @@ import java.util.List;
  */
 public record RotationResponse(EntityRef entity, List<Double> rotation) {
 
+    private static final Schema<List<Double>> ROTATION_SCHEMA =
+        Schema.ofType("array", Codec.DOUBLE.listOf());
+
     /**
      * Codec for serializing and deserializing {@link RotationResponse} instances.
      */
@@ -37,5 +40,5 @@ public record RotationResponse(EntityRef entity, List<Double> rotation) {
      */
     public static final Schema<RotationResponse> SCHEMA = Schema.record(CODEC)
         .withField("entity", EntityRef.SCHEMA)
-        .withField("rotation", Schema.ARRAY_SCHEMA);
+        .withField("rotation", ROTATION_SCHEMA);
 }
