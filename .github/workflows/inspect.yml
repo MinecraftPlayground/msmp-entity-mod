@@ -2,6 +2,7 @@ name: 'Inspect Classes'
 
 on:
   workflow_dispatch: {}
+  push: {}
 
 jobs:
   inspect:
