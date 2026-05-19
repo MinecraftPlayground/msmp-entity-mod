@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity_data.msmp.methods.position.set;
+package dev.loat.msmp_entity_data.msmp.methods.position;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -7,6 +7,7 @@ import net.minecraft.server.jsonrpc.api.Schema;
 
 import java.util.List;
 import java.util.Optional;
+
 
 /**
  * Request payload for the {@code entity_data:position/set} method.
@@ -41,5 +42,5 @@ public record PositionSetRequest(
     public static final Schema<PositionSetRequest> SCHEMA = Schema.record(CODEC)
         .withField("id", Schema.STRING_SCHEMA)
         .withField("name", Schema.STRING_SCHEMA)
-        .withField("position", Schema.ofType("array"));
+        .withField("position", Schema.ARRAY_SCHEMA);
 }
