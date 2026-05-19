@@ -37,5 +37,5 @@ public record RotationResponse(EntityRef entity, List<Double> rotation) {
      */
     public static final Schema<RotationResponse> SCHEMA = Schema.record(CODEC)
         .withField("entity", EntityRef.SCHEMA)
-        .withField("rotation", Schema.ofType("array"));
+        .withField("rotation", Schema.ARRAY_SCHEMA);
 }
