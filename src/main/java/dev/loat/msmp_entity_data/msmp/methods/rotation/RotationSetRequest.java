@@ -8,6 +8,7 @@ import net.minecraft.server.jsonrpc.api.Schema;
 import java.util.List;
 import java.util.Optional;
 
+
 /**
  * Request payload for the {@code entity_data:rotation/set} method.
  *
@@ -41,5 +42,5 @@ public record RotationSetRequest(
     public static final Schema<RotationSetRequest> SCHEMA = Schema.record(CODEC)
         .withField("id", Schema.STRING_SCHEMA)
         .withField("name", Schema.STRING_SCHEMA)
-        .withField("rotation", Schema.ofType("array"));
+        .withField("rotation", Schema.ARRAY_SCHEMA);
 }
