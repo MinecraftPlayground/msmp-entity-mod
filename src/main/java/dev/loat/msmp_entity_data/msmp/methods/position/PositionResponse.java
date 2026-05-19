@@ -7,6 +7,7 @@ import net.minecraft.server.jsonrpc.api.Schema;
 
 import java.util.List;
 
+
 /**
  * Response payload shared between {@code entity_data:position} and {@code entity_data:position/set}.
  *
@@ -36,5 +37,5 @@ public record PositionResponse(EntityRef entity, List<Double> position) {
      */
     public static final Schema<PositionResponse> SCHEMA = Schema.record(CODEC)
         .withField("entity", EntityRef.SCHEMA)
-        .withField("position", Schema.ofType("array"));
+        .withField("position", Schema.ARRAY_SCHEMA);
 }
