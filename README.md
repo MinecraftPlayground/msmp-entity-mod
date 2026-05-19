@@ -2,11 +2,13 @@
 
 # MSMP Entity Data
 
-A server-side Fabric mod that extends the [Minecraft Server Management Protocol](https://minecraft.wiki/w/Minecraft_Server_Management_Protocol) (MSMP) by providing additional functions for querying entity data.
+A server-side Fabric mod that extends the [Minecraft Server Management Protocol](https://minecraft.wiki/w/Minecraft_Server_Management_Protocol) (MSMP) by providing additional functions for querying and setting entity data.
+
+This mod is designed for tooling, dashboards, automation systems, external monitoring tools, and integrations that need structured access to entity information without relying on command parsing or RCON hacks.
 
 ## RPC Methods
 
-The mod currently provides the following MSMP RPC methods.
+The mod currently provides the following MSMP RPC methods. All of these methods are also automatically discoverable through the standard `rpc.discover` MSMP endpoint.
 
 | Method                       | Description                                                             |
 | ---------------------------- | ----------------------------------------------------------------------- |
