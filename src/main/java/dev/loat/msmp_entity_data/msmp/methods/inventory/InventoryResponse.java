@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.loat.msmp_entity_data.msmp.components.EntityRef;
 import net.minecraft.server.jsonrpc.api.Schema;
 
+
 /**
  * Response payload shared between {@code entity_data:inventory} and {@code entity_data:inventory/set}.
  *
@@ -38,6 +39,9 @@ public record InventoryResponse(EntityRef entity, JsonElement inventory) {
         json -> new Dynamic<>(JsonOps.INSTANCE, json)
     );
 
+    private static final Schema<JsonElement> INVENTORY_SCHEMA =
+        Schema.ofType("array", JSON_ELEMENT_CODEC);
+
     /**
      * Codec for serializing and deserializing {@link InventoryResponse} instances.
      */
@@ -51,5 +55,5 @@ public record InventoryResponse(EntityRef entity, JsonElement inventory) {
      */
     public static final Schema<InventoryResponse> SCHEMA = Schema.record(CODEC)
         .withField("entity", EntityRef.SCHEMA)
-        .withField("inventory", Schema.arrayOf(Schema.record(Codec.unit(null)), JSON_ELEMENT_CODEC));
+        .withField("inventory", INVENTORY_SCHEMA);
 }
