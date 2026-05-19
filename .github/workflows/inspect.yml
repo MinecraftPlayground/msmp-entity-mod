@@ -1,0 +1,33 @@
+name: 'Inspect Classes'
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Setup JDK'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - name: 'Setup Gradle'
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: 'Download dependencies'
+        run: ./gradlew dependencies --configuration compileClasspath
+
+      - name: 'Inspect Classes'
+        run: |
+          JAR=$(find ~/.gradle/caches -name "minecraft-merged-deobf-26.1.jar" | head -1)
+          echo "JAR: $JAR"
+          echo "=== Schema ==="
+          javap -classpath "$JAR" "net.minecraft.server.jsonrpc.api.Schema"
+          echo "=== ContainerHelper ==="
+          javap -classpath "$JAR" "net.minecraft.world.ContainerHelper"
+          echo "=== ItemStack ==="
+          javap -classpath "$JAR" "net.minecraft.world.item.ItemStack" | grep -E "public (static )?(.*parse|.*decode|.*of\(|.*from)"
