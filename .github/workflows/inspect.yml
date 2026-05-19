@@ -22,13 +22,11 @@ jobs:
       - name: 'Download dependencies'
         run: ./gradlew dependencies --configuration compileClasspath
 
-      - name: 'Inspect Classes'
+      - name: 'Inspect ItemStack'
         run: |
           JAR=$(find ~/.gradle/caches -name "minecraft-merged-deobf-26.1.jar" | head -1)
-          echo "JAR: $JAR"
-          echo "=== Schema ==="
-          javap -classpath "$JAR" "net.minecraft.server.jsonrpc.api.Schema"
-          echo "=== ContainerHelper ==="
-          javap -classpath "$JAR" "net.minecraft.world.ContainerHelper"
-          echo "=== ItemStack ==="
-          javap -classpath "$JAR" "net.minecraft.world.item.ItemStack" | grep -E "public (static )?(.*parse|.*decode|.*of\(|.*from)"
+          javap -classpath "$JAR" "net.minecraft.world.item.ItemStack" | grep -E "(parse|decode|load|read|save|encode|CODEC|SINGLE)"
+          echo "=== ValueOutput ==="
+          javap -classpath "$JAR" "net.minecraft.world.level.storage.ValueOutput" | head -40
+          echo "=== ValueInput ==="
+          javap -classpath "$JAR" "net.minecraft.world.level.storage.ValueInput" | head -40
