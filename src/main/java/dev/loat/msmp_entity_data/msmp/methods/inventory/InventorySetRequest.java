@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity_data.msmp.methods.inventory.set;
+package dev.loat.msmp_entity_data.msmp.methods.inventory;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
