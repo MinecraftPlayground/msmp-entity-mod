@@ -1,5 +1,6 @@
 package dev.loat.msmp_entity_data.msmp.components;
 
+import dev.loat.msmp_entity_data.logging.Logger;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -9,50 +10,52 @@ import net.minecraft.world.entity.player.Player;
 import java.util.Optional;
 import java.util.UUID;
 
-import dev.loat.msmp_entity_data.logging.Logger;
-
 
 /**
  * Utility class for resolving entities from MSMP request parameters.
  *
- * <p>Centralizes the common lookup logic shared across multiple methods,
- * avoiding duplication between e.g. {@code entity_data:health} and
- * {@code entity_data:location}.</p>
+ * <p>Works with any request implementing {@link EntityLookup}, centralizing
+ * the lookup logic shared across all entity methods.</p>
  */
 public final class EntityResolver {
 
     private EntityResolver() {}
 
     /**
-     * Resolves any {@link Entity} from the given {@link EntityRequest}.
+     * Resolves any {@link Entity} from the given {@link EntityLookup}.
      *
-     * @param server The running {@link MinecraftServer} instance
-     * @param request The request containing optional {@code id} and/or {@code name}
-     * 
+     * <p>Lookup order:</p>
+     * <ol>
+     *   <li>By UUID via {@code server.getPlayerList().getPlayer(UUID)} (players only, fast path)</li>
+     *   <li>By UUID via level entity lookup across all loaded levels</li>
+     *   <li>By name via {@code server.getPlayerList().getPlayerByName(String)} (players only)</li>
+     * </ol>
+     *
+     * @param server  The running {@link MinecraftServer} instance
+     * @param lookup  Any request implementing {@link EntityLookup}
      * @return The resolved {@link Entity}
-     * 
      * @throws IllegalArgumentException if neither field is provided, the UUID is malformed,
-     * or no matching entity is found
+     *                                  or no matching entity is found
      */
-    public static Entity resolveEntity(MinecraftServer server, EntityRequest request) {
-        if (request.id().isEmpty() && request.name().isEmpty()) {
-            Logger.warning("Either 'id' or 'name' must be provided");
-            return null;
+    public static Entity resolveEntity(MinecraftServer server, EntityLookup lookup) {
+        if (lookup.id().isEmpty() && lookup.name().isEmpty()) {
+            throw new IllegalArgumentException("Either 'id' or 'name' must be provided");
         }
 
         Entity entity = null;
 
-        if (request.id().isPresent()) {
+        if (lookup.id().isPresent()) {
             UUID uuid;
             try {
-                uuid = UUID.fromString(request.id().get());
+                uuid = UUID.fromString(lookup.id().get());
             } catch (IllegalArgumentException e) {
-                Logger.warning("Invalid UUID: " + request.id().get());
-                return null;
+                throw new IllegalArgumentException("Invalid UUID: " + lookup.id().get());
             }
 
+            // Fast path: try player list first
             entity = server.getPlayerList().getPlayer(uuid);
 
+            // Fall back to all loaded levels for non-player entities
             if (entity == null) {
                 for (ServerLevel level : server.getAllLevels()) {
                     Entity found = level.getEntity(uuid);
@@ -64,32 +67,29 @@ public final class EntityResolver {
             }
         }
 
-        if (entity == null && request.name().isPresent()) {
-            entity = server.getPlayerList().getPlayerByName(request.name().get());
+        // Name fallback: players only
+        if (entity == null && lookup.name().isPresent()) {
+            entity = server.getPlayerList().getPlayerByName(lookup.name().get());
         }
 
         if (entity == null) {
-            String identifier = request.id().orElseGet(() -> request.name().get());
-            Logger.warning("Entity not found: " + identifier);
-            return null;
+            String identifier = lookup.id().orElseGet(() -> lookup.name().get());
+            throw new IllegalArgumentException("Entity not found: " + identifier);
         }
 
         return entity;
     }
 
     /**
-     * Resolves a {@link LivingEntity} from the given {@link EntityRequest}.
-     *
-     * <p>Same lookup order as {@link #resolveEntity(MinecraftServer, EntityRequest)},
-     * but additionally throws if the found entity is not a {@link LivingEntity}.</p>
+     * Resolves a {@link LivingEntity} from the given {@link EntityLookup}.
      *
      * @param server  The running {@link MinecraftServer} instance
-     * @param request The request containing optional {@code id} and/or {@code name}
+     * @param lookup  Any request implementing {@link EntityLookup}
      * @return The resolved {@link LivingEntity}
-     * @throws IllegalArgumentException if the entity is found but is not a {@link LivingEntity}
+     * @throws IllegalArgumentException if the entity is not a {@link LivingEntity}
      */
-    public static LivingEntity resolveLivingEntity(MinecraftServer server, EntityRequest request) {
-        Entity entity = resolveEntity(server, request);
+    public static LivingEntity resolveLivingEntity(MinecraftServer server, EntityLookup lookup) {
+        Entity entity = resolveEntity(server, lookup);
         if (!(entity instanceof LivingEntity living)) {
             throw new IllegalArgumentException(
                 "Entity %s is not a LivingEntity".formatted(entity.getUUID())
@@ -99,18 +99,15 @@ public final class EntityResolver {
     }
 
     /**
-     * Resolves a {@link Player} from the given {@link EntityRequest}.
-     *
-     * <p>Same lookup order as {@link #resolveEntity(MinecraftServer, EntityRequest)},
-     * but additionally throws if the found entity is not a {@link Player}.</p>
+     * Resolves a {@link Player} from the given {@link EntityLookup}.
      *
      * @param server  The running {@link MinecraftServer} instance
-     * @param request The request containing optional {@code id} and/or {@code name}
+     * @param lookup  Any request implementing {@link EntityLookup}
      * @return The resolved {@link Player}
-     * @throws IllegalArgumentException if the entity is found but is not a {@link Player}
+     * @throws IllegalArgumentException if the entity is not a {@link Player}
      */
-    public static Player resolvePlayer(MinecraftServer server, EntityRequest request) {
-        Entity entity = resolveEntity(server, request);
+    public static Player resolvePlayer(MinecraftServer server, EntityLookup lookup) {
+        Entity entity = resolveEntity(server, lookup);
         if (!(entity instanceof Player player)) {
             throw new IllegalArgumentException(
                 "Entity %s is not a Player".formatted(entity.getUUID())

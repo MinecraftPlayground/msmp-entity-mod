@@ -22,7 +22,7 @@ import java.util.Optional;
  * @param id   The entity's UUID as a string, if provided
  * @param name The player's in-game name, if provided (only works for online players)
  */
-public record EntityRequest(Optional<String> id, Optional<String> name) {
+public record EntityRequest(Optional<String> id, Optional<String> name) implements EntityLookup {
 
     /**
      * Codec for serializing and deserializing {@link EntityRequest} instances.
