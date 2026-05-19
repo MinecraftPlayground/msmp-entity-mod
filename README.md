@@ -2,7 +2,7 @@
 
 # MSMP Entity Data
 
-A server-side Fabric mod that extends the [Minecraft Server Management Protocol](https://minecraft.wiki/w/Minecraft_Server_Management_Protocol) (MSMP) by providing additional functions for querying and setting entity data.
+A server-side Fabric mod that extends the [Minecraft Server Management Protocol](https://minecraft.wiki/w/Minecraft_Server_Management_Protocol) (MSMP) by providing additional functions for getting and setting entity data.
 
 This mod is designed for tooling, dashboards, automation systems, external monitoring tools, and integrations that need structured access to entity information without relying on command parsing or RCON hacks.
 
