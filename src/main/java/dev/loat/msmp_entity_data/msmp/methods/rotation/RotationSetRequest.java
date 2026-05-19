@@ -27,6 +27,9 @@ public record RotationSetRequest(
     List<Double> rotation
 ) implements EntityLookup {
 
+    private static final Schema<List<Double>> ROTATION_SCHEMA =
+        Schema.ofType("array", Codec.DOUBLE.listOf());
+
     /**
      * Codec for serializing and deserializing {@link RotationSetRequest} instances.
      */
@@ -42,5 +45,5 @@ public record RotationSetRequest(
     public static final Schema<RotationSetRequest> SCHEMA = Schema.record(CODEC)
         .withField("id", Schema.STRING_SCHEMA)
         .withField("name", Schema.STRING_SCHEMA)
-        .withField("rotation", Schema.ARRAY_SCHEMA);
+        .withField("rotation", ROTATION_SCHEMA);
 }
