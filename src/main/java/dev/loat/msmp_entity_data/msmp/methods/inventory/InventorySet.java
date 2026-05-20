@@ -7,6 +7,7 @@ import com.mojang.serialization.JsonOps;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity_data.logging.Logger;
 import dev.loat.msmp_entity_data.msmp.components.EntityResolver;
+import dev.loat.msmp_entity_data.msmp.methods.inventory.InventoryResponse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -43,8 +44,6 @@ import net.minecraft.world.item.ItemStack;
  * }</pre>
  */
 public class InventorySet {
-
-    private InventorySet() {}
 
     /**
      * Registers the {@code entity_data:inventory/set} method on the given {@link MSMPNamespace}.
@@ -91,7 +90,11 @@ public class InventorySet {
 
                         entry.remove("Slot");
 
-                        ItemStack stack = ItemStack.CODEC
+                        // Clear the slot if no id given or id is minecraft:air
+                        boolean isEmpty = !entry.has("id")
+                            || entry.get("id").getAsString().equals("minecraft:air");
+
+                        ItemStack stack = isEmpty ? ItemStack.EMPTY : ItemStack.CODEC
                             .decode(ctx, entry)
                             .getOrThrow(err -> new IllegalArgumentException(
                                 "Failed to deserialize item in slot %d: %s".formatted(slot, err)
