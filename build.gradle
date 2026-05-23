@@ -33,7 +33,7 @@ dependencies {
 
     implementation(include("org.yaml:snakeyaml:2.2"))
 
-    implementation("com.github.MinecraftPlayground:msmp-lib-mod:v1.3.0")
+    implementation("com.github.MinecraftPlayground:msmp-lib-mod:v1.4.1")
 }
 
 processResources {
