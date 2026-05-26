@@ -6,67 +6,56 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 /**
- * Manages per-connection entity event subscriptions.
+ * Manages per-connection entity subscriptions for a single notification type.
  *
- * <p>Holds a mapping of {@code connectionId -> event -> Set<UUID>} that tracks
- * which clients want to receive notifications for which events on which entities.
- * Thread-safe via {@link ConcurrentHashMap}.</p>
+ * <p>Each notification (e.g. {@code dimension/changed}) owns its own
+ * {@link SubscriptionManager} instance. Holds a mapping of
+ * {@code connectionId -> Set<UUID>} where {@link #WILDCARD} means all entities.</p>
  *
- * <p>A wildcard UUID ({@link #WILDCARD}) can be used to subscribe to an event
- * for <em>all</em> entities (e.g. all players).</p>
+ * <p>Thread-safe via {@link ConcurrentHashMap}.</p>
  */
 public class SubscriptionManager {
 
     /**
      * Special UUID sentinel meaning "all entities".
-     * Used when a client subscribes to an event without specifying entity IDs.
+     * Used when a client subscribes without specifying entity IDs.
      */
     public static final UUID WILDCARD = new UUID(0, 0);
 
-    /** connectionId -> event -> Set<entityUUID> */
-    private final Map<String, Map<SubscriptionEvent, Set<UUID>>> subscriptions =
-        new ConcurrentHashMap<>();
+    /** connectionId -> Set<entityUUID> */
+    private final Map<String, Set<UUID>> subscriptions = new ConcurrentHashMap<>();
 
     /**
-     * Subscribes a connection to the given event for the given entity UUIDs.
-     * Pass {@link #WILDCARD} to subscribe to all entities.
+     * Subscribes a connection to this notification for the given entity UUIDs.
+     * Pass {@link #WILDCARD} to receive notifications for all entities.
      *
      * @param connectionId The client connection ID
-     * @param event        The event to subscribe to
-     * @param entityIds    The entity UUIDs to track (or {@link #WILDCARD})
+     * @param entityIds    The entity UUIDs to track, or a set containing {@link #WILDCARD}
      */
-    public void subscribe(String connectionId, SubscriptionEvent event, Set<UUID> entityIds) {
+    public void subscribe(String connectionId, Set<UUID> entityIds) {
         subscriptions
-            .computeIfAbsent(connectionId, k -> new ConcurrentHashMap<>())
-            .computeIfAbsent(event, k -> ConcurrentHashMap.newKeySet())
+            .computeIfAbsent(connectionId, k -> ConcurrentHashMap.newKeySet())
             .addAll(entityIds);
     }
 
     /**
-     * Unsubscribes a connection from the given event for the given entity UUIDs.
-     * If no entity IDs are provided, removes the subscription entirely for that event.
+     * Unsubscribes a connection from this notification for the given entity UUIDs.
+     * If {@code entityIds} is empty, removes the connection entirely.
      *
      * @param connectionId The client connection ID
-     * @param event        The event to unsubscribe from
      * @param entityIds    The entity UUIDs to stop tracking, or empty to remove all
      */
-    public void unsubscribe(String connectionId, SubscriptionEvent event, Set<UUID> entityIds) {
-        Map<SubscriptionEvent, Set<UUID>> events = subscriptions.get(connectionId);
-        if (events == null) return;
-
+    public void unsubscribe(String connectionId, Set<UUID> entityIds) {
         if (entityIds.isEmpty()) {
-            events.remove(event);
-        } else {
-            Set<UUID> tracked = events.get(event);
-            if (tracked != null) {
-                tracked.removeAll(entityIds);
-                if (tracked.isEmpty()) events.remove(event);
-            }
+            subscriptions.remove(connectionId);
+            return;
         }
-
-        if (events.isEmpty()) subscriptions.remove(connectionId);
+        Set<UUID> tracked = subscriptions.get(connectionId);
+        if (tracked != null) {
+            tracked.removeAll(entityIds);
+            if (tracked.isEmpty()) subscriptions.remove(connectionId);
+        }
     }
 
     /**
@@ -80,18 +69,17 @@ public class SubscriptionManager {
     }
 
     /**
-     * Returns all connection IDs that are subscribed to the given event
+     * Returns all connection IDs subscribed to this notification
      * for the given entity UUID (including wildcard subscribers).
      *
-     * @param event    The event to check
      * @param entityId The UUID of the entity that triggered the event
-     * @return A set of connection IDs that should receive the notification
+     * @return An unmodifiable set of connection IDs that should receive the notification
      */
-    public Set<String> getSubscribers(SubscriptionEvent event, UUID entityId) {
+    public Set<String> getSubscribers(UUID entityId) {
         Set<String> result = ConcurrentHashMap.newKeySet();
-        for (Map.Entry<String, Map<SubscriptionEvent, Set<UUID>>> entry : subscriptions.entrySet()) {
-            Set<UUID> tracked = entry.getValue().get(event);
-            if (tracked != null && (tracked.contains(WILDCARD) || tracked.contains(entityId))) {
+        for (Map.Entry<String, Set<UUID>> entry : subscriptions.entrySet()) {
+            Set<UUID> tracked = entry.getValue();
+            if (tracked.contains(WILDCARD) || tracked.contains(entityId)) {
                 result.add(entry.getKey());
             }
         }
@@ -99,14 +87,12 @@ public class SubscriptionManager {
     }
 
     /**
-     * Returns whether any connection is subscribed to the given event
-     * for the given entity UUID.
+     * Returns whether any connection is subscribed for the given entity UUID.
      *
-     * @param event    The event to check
      * @param entityId The UUID of the entity
      * @return {@code true} if at least one connection is subscribed
      */
-    public boolean hasSubscribers(SubscriptionEvent event, UUID entityId) {
-        return !getSubscribers(event, entityId).isEmpty();
+    public boolean hasSubscribers(UUID entityId) {
+        return !getSubscribers(entityId).isEmpty();
     }
 }
