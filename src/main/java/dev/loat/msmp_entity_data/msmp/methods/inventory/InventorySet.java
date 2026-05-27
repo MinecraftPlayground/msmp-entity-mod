@@ -7,7 +7,6 @@ import com.mojang.serialization.JsonOps;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity_data.logging.Logger;
 import dev.loat.msmp_entity_data.msmp.components.EntityResolver;
-import dev.loat.msmp_entity_data.msmp.methods.inventory.InventoryResponse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
