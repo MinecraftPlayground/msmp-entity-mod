@@ -30,8 +30,9 @@ public class Notifications {
      */
     public static void register(
         MSMPNamespace namespace,
-        DimensionChanged.MSMPServerSupplier msmpServer
+        DimensionChanged.MSMPServerSupplier msmpServer,
+        SubscriptionManager dimensionSubscriptionManager
     ) {
-        DimensionChanged.register(namespace, msmpServer, new SubscriptionManager());
+        DimensionChanged.register(namespace, msmpServer, dimensionSubscriptionManager);
     }
 }

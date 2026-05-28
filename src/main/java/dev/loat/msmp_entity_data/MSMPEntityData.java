@@ -5,6 +5,7 @@ import dev.loat.msmp.MSMPServer;
 import dev.loat.msmp_entity_data.logging.Logger;
 import dev.loat.msmp_entity_data.msmp.methods.Methods;
 import dev.loat.msmp_entity_data.msmp.notifications.Notifications;
+import dev.loat.msmp_entity_data.msmp.subscription.SubscriptionManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
@@ -38,8 +39,10 @@ public class MSMPEntityData implements ModInitializer {
     public void onInitialize() {
         Logger.setLoggerClass(MSMPEntityData.class);
 
-        Methods.register(NS);
-        Notifications.register(NS, () -> msmp);
+        SubscriptionManager dimensionSubscriptionManager = new SubscriptionManager();
+
+        Methods.register(NS, dimensionSubscriptionManager);
+        Notifications.register(NS, () -> msmp, dimensionSubscriptionManager);
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             NS.attach(server);

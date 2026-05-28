@@ -35,9 +35,7 @@ public class Methods {
      *
      * @param namespace The namespace to register all methods under
      */
-    public static void register(MSMPNamespace namespace) {
-        SubscriptionManager dimensionSubscriptionManager = new SubscriptionManager();
-
+    public static void register(MSMPNamespace namespace, SubscriptionManager dimensionSubscriptionManager) {
         Dimension.register(namespace);
         DimensionSet.register(namespace);
         DimensionSubscribe.register(namespace, dimensionSubscriptionManager);
