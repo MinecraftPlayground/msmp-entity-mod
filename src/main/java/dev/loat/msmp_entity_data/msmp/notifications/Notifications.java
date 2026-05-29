@@ -3,7 +3,7 @@ package dev.loat.msmp_entity_data.msmp.notifications;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp.MSMPServer;
 import dev.loat.msmp_entity_data.msmp.notifications.dimension.changed.DimensionChanged;
-import dev.loat.msmp_entity_data.msmp.subscription.SubscriptionManager;
+
 
 /**
  * Central registration point for all {@code entity_data} MSMP notifications.
@@ -30,9 +30,8 @@ public class Notifications {
      */
     public static void register(
         MSMPNamespace namespace,
-        DimensionChanged.MSMPServerSupplier msmpServer,
-        SubscriptionManager dimensionSubscriptionManager
+        DimensionChanged.MSMPServerSupplier msmpServer
     ) {
-        DimensionChanged.register(namespace, msmpServer, dimensionSubscriptionManager);
+        DimensionChanged.register(namespace, msmpServer);
     }
 }

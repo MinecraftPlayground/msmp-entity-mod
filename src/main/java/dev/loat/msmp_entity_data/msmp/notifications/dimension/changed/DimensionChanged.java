@@ -13,8 +13,7 @@ public class DimensionChanged {
 
     public static void register(
         MSMPNamespace namespace,
-        MSMPServerSupplier msmpServer,
-        SubscriptionManager subscriptionManager
+        MSMPServerSupplier msmpServer
     ) {
         MSMPNotification<DimensionChangedPayload> notification =
             namespace.notification("dimension/changed", DimensionChangedPayload.SCHEMA,
@@ -22,18 +21,17 @@ public class DimensionChanged {
 
         ServerEntityLevelChangeEvents.AFTER_ENTITY_CHANGE_LEVEL.register(
             (originalEntity, newEntity, origin, destination) ->
-                dispatch(msmpServer, subscriptionManager, notification, newEntity, origin, destination)
+                dispatch(msmpServer, notification, newEntity, origin, destination)
         );
 
         ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register(
             (player, origin, destination) ->
-                dispatch(msmpServer, subscriptionManager, notification, player, origin, destination)
+                dispatch(msmpServer, notification, player, origin, destination)
         );
     }
 
     private static void dispatch(
         MSMPServerSupplier msmpServer,
-        SubscriptionManager subscriptionManager,
         MSMPNotification<DimensionChangedPayload> notification,
         Entity entity,
         ServerLevel origin,
@@ -42,7 +40,8 @@ public class DimensionChanged {
         MSMPServer server = msmpServer.get();
         if (server == null) return;
 
-        if (!subscriptionManager.hasSubscribers(entity.getUUID())) return;
+        SubscriptionManager manager = SubscriptionManager.get("entity_data:dimension/subscribe");
+        if (!manager.isSubscribed(entity.getUUID())) return;
 
         DimensionChangedPayload payload = new DimensionChangedPayload(
             EntityResolver.toEntityRef(entity),
@@ -50,9 +49,7 @@ public class DimensionChanged {
             destination.dimension().identifier().toString()
         );
 
-        for (Integer connectionId : subscriptionManager.getSubscribers(entity.getUUID())) {
-            server.sendTo(connectionId, notification, payload);
-        }
+        server.send(notification, payload);
     }
 
     @FunctionalInterface

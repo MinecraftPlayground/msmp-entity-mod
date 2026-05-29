@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class DimensionUnsubscribe {
 
-    public static void register(MSMPNamespace namespace, SubscriptionManager subscriptionManager) {
+    public static void register(MSMPNamespace namespace) {
         namespace.method("dimension/unsubscribe",
             SubscribeRequest.SCHEMA,
             SubscribeResponse.SCHEMA,
@@ -28,7 +28,7 @@ public class DimensionUnsubscribe {
                     return new SubscribeResponse(List.of());
                 }
 
-                int connectionId = client.connectionId();
+                SubscriptionManager manager = SubscriptionManager.get("entity_data:dimension/subscribe");
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 
@@ -38,12 +38,12 @@ public class DimensionUnsubscribe {
                         uuids.add(entity.getUUID());
                         resolved.add(EntityResolver.toEntityRef(entity));
                     } catch (IllegalArgumentException e) {
-                        RPCConnectionLogger.warning(client.connectionId(), "entity_data:dimension/unsubscribe - ".formatted(e.getMessage()));
+                        RPCConnectionLogger.warning(client.connectionId(), "entity_data:dimension/unsubscribe - " + e.getMessage());
                         throw e;
                     }
                 }
 
-                subscriptionManager.unsubscribe(connectionId, uuids);
+                manager.unsubscribe(uuids);
                 RPCConnectionLogger.info(client.connectionId(), "entity_data:dimension/unsubscribe - unsubscribed from %s".formatted(uuids));
                 return new SubscribeResponse(resolved);
             }

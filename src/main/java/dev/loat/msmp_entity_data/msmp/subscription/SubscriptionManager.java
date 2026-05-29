@@ -1,47 +1,36 @@
 package dev.loat.msmp_entity_data.msmp.subscription;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 public class SubscriptionManager {
 
-    /** connectionId -> Set<entityUUID> */
-    private final Map<Integer, Set<UUID>> subscriptions = new ConcurrentHashMap<>();
+    private static final Map<String, SubscriptionManager> REGISTRY = new ConcurrentHashMap<>();
 
-    public void subscribe(int connectionId, Set<UUID> entityIds) {
-        if (entityIds.isEmpty()) return;
-        subscriptions
-            .computeIfAbsent(connectionId, k -> ConcurrentHashMap.newKeySet())
-            .addAll(entityIds);
+    public static SubscriptionManager get(String key) {
+        return REGISTRY.computeIfAbsent(key, k -> new SubscriptionManager());
     }
 
-    public void unsubscribe(int connectionId, Set<UUID> entityIds) {
-        if (entityIds.isEmpty()) return;
-        Set<UUID> tracked = subscriptions.get(connectionId);
-        if (tracked != null) {
-            tracked.removeAll(entityIds);
-            if (tracked.isEmpty()) subscriptions.remove(connectionId);
-        }
+    private final Set<UUID> subscriptions = ConcurrentHashMap.newKeySet();
+
+    private SubscriptionManager() {}
+
+    public void subscribe(Set<UUID> entityIds) {
+        subscriptions.addAll(entityIds);
     }
 
-    public void removeAll(int connectionId) {
-        subscriptions.remove(connectionId);
+    public void unsubscribe(Set<UUID> entityIds) {
+        subscriptions.removeAll(entityIds);
     }
 
-    public Set<Integer> getSubscribers(UUID entityId) {
-        Set<Integer> result = ConcurrentHashMap.newKeySet();
-        for (Map.Entry<Integer, Set<UUID>> entry : subscriptions.entrySet()) {
-            if (entry.getValue().contains(entityId)) {
-                result.add(entry.getKey());
-            }
-        }
-        return Collections.unmodifiableSet(result);
+    public boolean isSubscribed(UUID entityId) {
+        return subscriptions.contains(entityId);
     }
 
-    public boolean hasSubscribers(UUID entityId) {
-        return !getSubscribers(entityId).isEmpty();
+    public Set<UUID> getSubscriptions() {
+        return Collections.unmodifiableSet(subscriptions);
     }
 }

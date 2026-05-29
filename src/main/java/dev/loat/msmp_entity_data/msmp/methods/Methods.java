@@ -16,7 +16,6 @@ import dev.loat.msmp_entity_data.msmp.methods.rotation.RotationSet;
 import dev.loat.msmp_entity_data.msmp.methods.saturation.Saturation;
 import dev.loat.msmp_entity_data.msmp.methods.saturation.SaturationSet;
 import dev.loat.msmp_entity_data.msmp.methods.uuid.UUID;
-import dev.loat.msmp_entity_data.msmp.subscription.SubscriptionManager;
 
 
 /**
@@ -35,11 +34,11 @@ public class Methods {
      *
      * @param namespace The namespace to register all methods under
      */
-    public static void register(MSMPNamespace namespace, SubscriptionManager dimensionSubscriptionManager) {
+    public static void register(MSMPNamespace namespace) {
         Dimension.register(namespace);
         DimensionSet.register(namespace);
-        DimensionSubscribe.register(namespace, dimensionSubscriptionManager);
-        DimensionUnsubscribe.register(namespace, dimensionSubscriptionManager);
+        DimensionSubscribe.register(namespace);
+        DimensionUnsubscribe.register(namespace);
         Health.register(namespace);
         HealthSet.register(namespace);
         Inventory.register(namespace);
