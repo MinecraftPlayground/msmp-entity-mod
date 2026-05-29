@@ -8,7 +8,7 @@ group = project.maven_group
 
 loom {
     mods {
-        "msmp-entity-data" {
+        "msmp-data" {
             sourceSet sourceSets.main
         }
     }

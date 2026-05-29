@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "msmp-entity-data",
+  "id": "msmp-data",
   "version": "${version}",
-  "name": "MSMP Entity Data",
+  "name": "MSMP Entity",
   "description": "Extends the Minecraft Server Management Protocol (MSMP) by providing additional functions for querying and setting entity data",
   "authors": [],
   "contact": {},
@@ -11,14 +11,14 @@
   "environment": "server",
   "entrypoints": {
     "main": [
-      "dev.loat.msmp_entity_data.MSMPEntityData"
+      "dev.loat.msmp_entity.MSMPEntity"
     ]
   },
   "mixins": [],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
-    "minecraft": "${minecraft_version}",
+    "minecraft": "^${minecraft_version}",
     "msmp-lib": "*"
   },
   "custom": {

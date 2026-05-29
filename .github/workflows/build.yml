@@ -1,7 +1,7 @@
 name: 'Build Mod'
 
 env:
-  ARTIFACT_NAME: 'msmp_entity_data'
+  ARTIFACT_NAME: 'msmp_entity'
 
 on:
   workflow_call: {}
