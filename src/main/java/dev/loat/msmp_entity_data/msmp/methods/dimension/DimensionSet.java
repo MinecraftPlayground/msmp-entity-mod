@@ -1,7 +1,7 @@
 package dev.loat.msmp_entity_data.msmp.methods.dimension;
 
 import dev.loat.msmp.MSMPNamespace;
-import dev.loat.msmp_entity_data.logging.Logger;
+import dev.loat.msmp_entity_data.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity_data.msmp.components.EntityResolver;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -64,12 +64,14 @@ public class DimensionSet {
                         true
                     );
 
+                    RPCConnectionLogger.info(client.connectionId(), "entity_data:dimension/set - teleported %s to dimension %s".formatted(entity.getUUID(), params.dimension()));
+
                     return new DimensionResponse(
                         EntityResolver.toEntityRef(entity),
                         entity.level().dimension().identifier().toString()
                     );
                 } catch (IllegalArgumentException e) {
-                    Logger.warning("entity_data:dimension/set - " + e.getMessage());
+                    RPCConnectionLogger.warning(client.connectionId(), "entity_data:dimension/set - " + e.getMessage());
                     throw e;
                 }
             }

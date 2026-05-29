@@ -3,6 +3,8 @@ package dev.loat.msmp_entity_data.msmp.methods;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity_data.msmp.methods.dimension.Dimension;
 import dev.loat.msmp_entity_data.msmp.methods.dimension.DimensionSet;
+import dev.loat.msmp_entity_data.msmp.methods.dimension.subscribe.DimensionSubscribe;
+import dev.loat.msmp_entity_data.msmp.methods.dimension.subscribe.DimensionUnsubscribe;
 import dev.loat.msmp_entity_data.msmp.methods.health.Health;
 import dev.loat.msmp_entity_data.msmp.methods.health.HealthSet;
 import dev.loat.msmp_entity_data.msmp.methods.inventory.Inventory;
@@ -35,6 +37,8 @@ public class Methods {
     public static void register(MSMPNamespace namespace) {
         Dimension.register(namespace);
         DimensionSet.register(namespace);
+        DimensionSubscribe.register(namespace);
+        DimensionUnsubscribe.register(namespace);
         Health.register(namespace);
         HealthSet.register(namespace);
         Inventory.register(namespace);
