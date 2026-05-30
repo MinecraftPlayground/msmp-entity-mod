@@ -32,6 +32,6 @@ public class Notifications {
         MSMPNamespace namespace,
         DimensionChanged.MSMPServerSupplier msmpServer
     ) {
-        DimensionChanged.register(namespace, msmpServer);
+        // DimensionChanged.register(namespace, msmpServer);
     }
 }

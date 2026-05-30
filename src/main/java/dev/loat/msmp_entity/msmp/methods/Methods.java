@@ -2,9 +2,9 @@ package dev.loat.msmp_entity.msmp.methods;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.msmp.methods.dimension.Dimension;
-import dev.loat.msmp_entity.msmp.methods.dimension.DimensionSet;
-import dev.loat.msmp_entity.msmp.methods.dimension.subscribe.DimensionSubscribe;
-import dev.loat.msmp_entity.msmp.methods.dimension.subscribe.DimensionUnsubscribe;
+import dev.loat.msmp_entity.msmp.methods.dimension.changed.DimensionChangedAdd;
+import dev.loat.msmp_entity.msmp.methods.dimension.changed.DimensionChangedRemove;
+import dev.loat.msmp_entity.msmp.methods.dimension.set.DimensionSet;
 import dev.loat.msmp_entity.msmp.methods.health.Health;
 import dev.loat.msmp_entity.msmp.methods.health.HealthSet;
 import dev.loat.msmp_entity.msmp.methods.inventory.Inventory;
@@ -35,10 +35,10 @@ public class Methods {
      * @param namespace The namespace to register all methods under
      */
     public static void register(MSMPNamespace namespace) {
-        Dimension.register(namespace);
-        DimensionSet.register(namespace);
-        DimensionSubscribe.register(namespace);
-        DimensionUnsubscribe.register(namespace);
+        // Dimension.register(namespace);
+        // DimensionSet.register(namespace);
+        // DimensionChangedAdd.register(namespace);
+        // DimensionChangedRemove.register(namespace);
         Health.register(namespace);
         HealthSet.register(namespace);
         Inventory.register(namespace);

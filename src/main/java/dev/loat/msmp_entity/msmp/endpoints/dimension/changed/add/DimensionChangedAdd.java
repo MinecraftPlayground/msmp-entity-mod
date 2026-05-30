@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.dimension.subscribe;
+package dev.loat.msmp_entity.msmp.endpoints.dimension.changed.add;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.RPCConnectionLogger;
@@ -8,6 +8,7 @@ import dev.loat.msmp_entity.msmp.components.EntityResolver;
 import dev.loat.msmp_entity.msmp.subscription.SubscribeRequest;
 import dev.loat.msmp_entity.msmp.subscription.SubscribeResponse;
 import dev.loat.msmp_entity.msmp.subscription.SubscriptionManager;
+
 import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
@@ -16,19 +17,21 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class DimensionUnsubscribe {
+
+public class DimensionChangedAdd {
 
     public static void register(MSMPNamespace namespace) {
-        namespace.method("dimension/unsubscribe",
+        namespace.method(
+            "dimension/changed/add",
             SubscribeRequest.SCHEMA,
             SubscribeResponse.SCHEMA,
-            "Unsubscribe from dimension change notifications for the given entities",
+            "Add entities to the dimension change notification list",
             (server, params, client) -> {
                 if (params.entities().isEmpty()) {
                     return new SubscribeResponse(List.of());
                 }
 
-                SubscriptionManager manager = SubscriptionManager.get("entity:dimension/subscribe");
+                SubscriptionManager manager = SubscriptionManager.get("entity:notification/dimension/changed");
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 
@@ -38,13 +41,16 @@ public class DimensionUnsubscribe {
                         uuids.add(entity.getUUID());
                         resolved.add(EntityResolver.toEntityRef(entity));
                     } catch (IllegalArgumentException e) {
-                        RPCConnectionLogger.warning(client.connectionId(), "entity:dimension/unsubscribe - " + e.getMessage());
+                        RPCConnectionLogger.warning(client.connectionId(), "entity:dimension/changed/add - " + e.getMessage());
                         throw e;
                     }
                 }
 
-                manager.unsubscribe(uuids);
-                RPCConnectionLogger.info(client.connectionId(), "entity:dimension/unsubscribe - unsubscribed from %s".formatted(uuids));
+                manager.subscribe(uuids);
+                RPCConnectionLogger.info(
+                    client.connectionId(),
+                    "entity:dimension/changed/add - added %s to the dimension change notification list".formatted(uuids)
+                );
                 return new SubscribeResponse(resolved);
             }
         );

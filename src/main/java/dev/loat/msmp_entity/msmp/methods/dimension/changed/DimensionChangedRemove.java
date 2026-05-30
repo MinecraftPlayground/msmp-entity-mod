@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.dimension.subscribe;
+package dev.loat.msmp_entity.msmp.methods.dimension.changed;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.RPCConnectionLogger;
@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class DimensionSubscribe {
+public class DimensionChangedRemove {
 
     public static void register(MSMPNamespace namespace) {
-        namespace.method("dimension/subscribe",
+        namespace.method("dimension/changed/remove",
             SubscribeRequest.SCHEMA,
             SubscribeResponse.SCHEMA,
-            "Subscribe to dimension change notifications for the given entities",
+            "Remove entities from the dimension change notification list",
             (server, params, client) -> {
                 if (params.entities().isEmpty()) {
                     return new SubscribeResponse(List.of());
@@ -38,13 +38,13 @@ public class DimensionSubscribe {
                         uuids.add(entity.getUUID());
                         resolved.add(EntityResolver.toEntityRef(entity));
                     } catch (IllegalArgumentException e) {
-                        RPCConnectionLogger.warning(client.connectionId(), "entity:dimension/subscribe - " + e.getMessage());
+                        RPCConnectionLogger.warning(client.connectionId(), "entity:dimension/unsubscribe - " + e.getMessage());
                         throw e;
                     }
                 }
 
-                manager.subscribe(uuids);
-                RPCConnectionLogger.info(client.connectionId(), "entity:dimension/subscribe - subscribed to %s".formatted(uuids));
+                manager.unsubscribe(uuids);
+                RPCConnectionLogger.info(client.connectionId(), "entity:dimension/unsubscribe - unsubscribed from %s".formatted(uuids));
                 return new SubscribeResponse(resolved);
             }
         );

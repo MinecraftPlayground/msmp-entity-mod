@@ -1,8 +1,9 @@
-package dev.loat.msmp_entity.msmp.methods.dimension;
+package dev.loat.msmp_entity.msmp.methods.dimension.set;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+import dev.loat.msmp_entity.msmp.methods.dimension.DimensionResponse;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;

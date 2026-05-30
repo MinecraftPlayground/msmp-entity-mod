@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.dimension;
+package dev.loat.msmp_entity.msmp.methods.dimension.set;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

@@ -3,7 +3,7 @@
   "id": "msmp-data",
   "version": "${version}",
   "name": "MSMP Entity",
-  "description": "Extends the Minecraft Server Management Protocol (MSMP) by providing additional functions for querying and setting entity data",
+  "description": "Extends the Minecraft Server Management Protocol (MSMP) by providing additional functions for getting and setting entity data",
   "authors": [],
   "contact": {},
   "license": "LGPL-3.0-only",
@@ -24,7 +24,7 @@
   "custom": {
     "mc-publish": {
       "modrinth": {
-        "project_id": "---",
+        "project_id": "KoGT0iGr",
         "loaders": [
           "fabric"
         ]
