@@ -40,7 +40,7 @@ public class MSMPEntity implements ModInitializer {
         Logger.setLoggerClass(MSMPEntity.class);
 
         Methods.register(NS);
-        Endpoints.register(NS, msmp);
+        Endpoints.register(NS, () -> msmp);
         Notifications.register(NS, () -> msmp);
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {

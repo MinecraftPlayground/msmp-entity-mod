@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.health;
+package dev.loat.msmp_entity.msmp.endpoints.health;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,16 +14,19 @@ import java.util.Optional;
  * <p>At least one of {@code health} or {@code max_health} must be present.
  * Only the provided fields are updated; omitted fields remain unchanged.</p>
  *
- * <p>Example JSON representations:</p>
- * <pre>{@code
+ * <p>Example request:</p>
+ * <pre><code>
+ * // Only health is set
  * { "id": "069a...", "health": 15.0 }
+ * // Only max health is set
  * { "id": "069a...", "max_health": 40.0 }
+ * // Both are set
  * { "name": "Steve", "health": 15.0, "max_health": 40.0 }
- * }</pre>
- *
- * @param id        The entity's UUID as a string, if provided
- * @param name      The player's in-game name, if provided (only works for online players)
- * @param health    The new health value to set, if provided
+ * </code></pre>
+ * 
+ * @param id The entity's UUID as a string, if provided
+ * @param name The player's in-game name, if provided (only works for online players)
+ * @param health The new health value to set, if provided
  * @param maxHealth The new maximum health value to set, if provided
  */
 public record HealthSetRequest(

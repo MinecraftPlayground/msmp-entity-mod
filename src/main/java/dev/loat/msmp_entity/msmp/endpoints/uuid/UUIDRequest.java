@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.uuid;
+package dev.loat.msmp_entity.msmp.endpoints.uuid;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

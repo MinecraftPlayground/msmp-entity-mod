@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.inventory;
+package dev.loat.msmp_entity.msmp.endpoints.items;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
@@ -19,24 +19,29 @@ import java.util.Optional;
  * To clear a slot, provide {@code "id": "minecraft:air"}.</p>
  *
  * <p>Example JSON representation:</p>
- * <pre>{@code
+ * <pre><code>
  * {
  *   "name": "Steve",
  *   "inventory": [
  *     { "Slot": 0, "id": "minecraft:diamond_sword", "count": 1 },
  *     { "Slot": 9, "id": "minecraft:air", "count": 0 }
- *   ]
+ *   ],
+ *   "equipment": {
+ *     "head": { "id": "minecraft:diamond_helmet", "count": 1 }
+ *   }
  * }
- * }</pre>
+ * </code></pre>
  *
- * @param id        The entity's UUID as a string, if provided
- * @param name      The player's in-game name, if provided (only works for online players)
+ * @param id The entity's UUID as a string, if provided
+ * @param name The player's in-game name, if provided (only works for online players)
  * @param inventory The list of slot updates in Vanilla NBT format
+ * @param equipment The equipment updates keyed by slot name (head, chest, legs, feet, offhand)
  */
-public record InventorySetRequest(
+public record ItemsSetRequest(
     Optional<String> id,
     Optional<String> name,
-    JsonElement inventory
+    JsonElement inventory,
+    JsonElement equipment
 ) implements EntityLookup {
 
     /**
@@ -50,20 +55,25 @@ public record InventorySetRequest(
     private static final Schema<JsonElement> INVENTORY_SCHEMA =
         Schema.ofType("array", JSON_ELEMENT_CODEC);
 
-    /**
-     * Codec for serializing and deserializing {@link InventorySetRequest} instances.
-     */
-    public static final Codec<InventorySetRequest> CODEC = RecordCodecBuilder.create(i -> i.group(
-        Codec.STRING.optionalFieldOf("id").forGetter(InventorySetRequest::id),
-        Codec.STRING.optionalFieldOf("name").forGetter(InventorySetRequest::name),
-        JSON_ELEMENT_CODEC.fieldOf("inventory").forGetter(InventorySetRequest::inventory)
-    ).apply(i, InventorySetRequest::new));
+    private static final Schema<JsonElement> EQUIPMENT_SCHEMA =
+        Schema.ofType("object", JSON_ELEMENT_CODEC);
 
     /**
-     * MSMP schema for {@link InventorySetRequest}, used for protocol discovery.
+     * Codec for serializing and deserializing {@link ItemsSetRequest} instances.
      */
-    public static final Schema<InventorySetRequest> SCHEMA = Schema.record(CODEC)
+    public static final Codec<ItemsSetRequest> CODEC = RecordCodecBuilder.create(i -> i.group(
+        Codec.STRING.optionalFieldOf("id").forGetter(ItemsSetRequest::id),
+        Codec.STRING.optionalFieldOf("name").forGetter(ItemsSetRequest::name),
+        JSON_ELEMENT_CODEC.fieldOf("inventory").forGetter(ItemsSetRequest::inventory),
+        JSON_ELEMENT_CODEC.fieldOf("equipment").forGetter(ItemsSetRequest::equipment)
+    ).apply(i, ItemsSetRequest::new));
+
+    /**
+     * MSMP schema for {@link ItemsSetRequest}, used for protocol discovery.
+     */
+    public static final Schema<ItemsSetRequest> SCHEMA = Schema.record(CODEC)
         .withField("id", Schema.STRING_SCHEMA)
         .withField("name", Schema.STRING_SCHEMA)
-        .withField("inventory", INVENTORY_SCHEMA);
+        .withField("inventory", INVENTORY_SCHEMA)
+        .withField("equipment", EQUIPMENT_SCHEMA);
 }

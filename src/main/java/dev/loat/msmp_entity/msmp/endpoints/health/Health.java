@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.health;
+package dev.loat.msmp_entity.msmp.endpoints.health;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
@@ -15,21 +15,23 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
  * Players can be looked up by UUID or name; all other entities require a UUID.</p>
  *
  * <p>Example request:</p>
- * <pre>{@code
+ * <pre><code>
  * {
- *   "jsonrpc": "2.0", "id": 1, "method": "entity:health",
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:health",
  *   "params": [{ "name": "Steve" }]
  * }
- * }</pre>
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
+ * <pre><code>
  * {
  *   "entity": { "id": "069a...", "name": "Steve" },
  *   "health": 20.0,
  *   "max_health": 20.0
  * }
- * }</pre>
+ * </code></pre>
  */
 public class Health {
 
@@ -45,10 +47,11 @@ public class Health {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("health",
+        namespace.method(
+            "health",
             EntityRequest.SCHEMA,
             HealthResponse.SCHEMA,
-            "Returns the current and maximum health of any LivingEntity by UUID, or a player by name",
+            "Returns the current and maximum health of any LivingEntity",
             (server, params, client) -> {
                 try {
                     LivingEntity living = EntityResolver.resolveLivingEntity(server, params);

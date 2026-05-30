@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.inventory;
+package dev.loat.msmp_entity.msmp.endpoints.items;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -8,12 +8,13 @@ import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 
 /**
- * Registers the {@code entity:inventory} MSMP method.
+ * Registers the {@code entity:items} MSMP method.
  *
  * <p>Returns all occupied inventory slots of an online player in the Vanilla NBT
  * {@code Inventory} format, equivalent to {@code /data get entity @s Inventory}.</p>
@@ -27,28 +28,36 @@ import net.minecraft.world.item.ItemStack;
  * </ul>
  *
  * <p>Example request:</p>
- * <pre>{@code
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:inventory",
- *   "params": [{ "name": "Steve" }] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:items",
+ *   "params": [{ "name": "Steve" }]
+ * }
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
+ * <pre><code>
  * {
  *   "entity": { "id": "069a...", "name": "Steve" },
  *   "inventory": [
  *     { "Slot": 0, "id": "minecraft:diamond_sword", "count": 1, "components": { ... } },
- *     { "Slot": 36, "id": "minecraft:iron_boots", "count": 1 }
- *   ]
+ *     { "Slot": 20, "id": "minecraft:iron_boots", "count": 1 }
+ *   ],
+ *   "equipment": {
+ *     "head": { "id": "minecraft:diamond_helmet", "count": 1 },
+ *     "feet": { "id": "minecraft:diamond_boots", "count": 1 }
+ *   }
  * }
- * }</pre>
+ * </code></pre>
  */
-public class Inventory {
+public class Items {
 
-    private Inventory() {}
+    private Items() {}
 
     /**
-     * Registers the {@code entity:inventory} method on the given {@link MSMPNamespace}.
+     * Registers the {@code entity:items} method on the given {@link MSMPNamespace}.
      *
      * <p>Entity lookup is delegated to {@link EntityResolver#resolvePlayer} since only
      * players have an inventory. Each occupied slot is serialized via {@link ItemStack#CODEC}
@@ -58,19 +67,21 @@ public class Inventory {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("inventory",
+        namespace.method(
+            "items",
             EntityRequest.SCHEMA,
-            InventoryResponse.SCHEMA,
+            ItemsResponse.SCHEMA,
             "Returns all occupied inventory slots of an online player in Vanilla NBT format",
             (server, params, client) -> {
                 try {
                     Player player = EntityResolver.resolvePlayer(server, params);
-                    net.minecraft.world.entity.player.Inventory inv = player.getInventory();
+                    Inventory items = player.getInventory();
 
-                    JsonArray inventory = new JsonArray();
+                    JsonArray inventoryItems = new JsonArray();
+                    JsonObject equipmentItems = new JsonObject();
 
-                    for (int slot = 0; slot < inv.getContainerSize(); slot++) {
-                        ItemStack stack = inv.getItem(slot);
+                    for (int slot = 0; slot < items.getContainerSize(); slot++) {
+                        ItemStack stack = items.getItem(slot);
                         if (stack.isEmpty()) continue;
 
                         final int finalSlot = slot;
@@ -81,13 +92,29 @@ public class Inventory {
                             ));
 
                         JsonObject entry = itemJson.getAsJsonObject().deepCopy();
-                        entry.addProperty("Slot", slot);
-                        inventory.add(entry);
+                        entry.addProperty("count", entry.has("count") ? entry.get("count").getAsInt() : 1);
+
+                        if (slot >= 36 && slot <= 40) {
+                            String equipmentKey = switch (slot) {
+                                case 36 -> "feet";
+                                case 37 -> "legs";
+                                case 38 -> "chest";
+                                case 39 -> "head";
+                                case 40 -> "offhand";
+                                default -> null;
+                            };
+                            if (equipmentKey != null) {
+                                equipmentItems.add(equipmentKey, entry);
+                            }
+                        } else {
+                            entry.addProperty("Slot", slot);
+                            inventoryItems.add(entry);
+                        }
                     }
 
-                    return new InventoryResponse(EntityResolver.toEntityRef(player), inventory);
+                    return new ItemsResponse(EntityResolver.toEntityRef(player), inventoryItems, equipmentItems);
                 } catch (IllegalArgumentException e) {
-                    Logger.warning("entity:inventory - " + e.getMessage());
+                    Logger.warning("entity:items - " + e.getMessage());
                     throw e;
                 }
             }

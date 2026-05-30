@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.uuid;
+package dev.loat.msmp_entity.msmp.endpoints.uuid;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
@@ -13,17 +13,22 @@ import net.minecraft.server.level.ServerPlayer;
  * which always includes the UUID and the confirmed in-game name.</p>
  *
  * <p>Example request:</p>
- * <pre>{@code
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:uuid",
- *   "params": [{ "name": "Steve" }] }
+ * <pre>
+ * {@code {
+ *   "jsonrpc": "2.0", "id": 1, "method": "entity:uuid",
+ *   "params": [{ "name": "Steve" }]
+ * }
  * }</pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
+ * <pre>
+ * {@code
  * { "id": "069a79f4-44e9-4726-a5be-fca90e38aaf5", "name": "Steve" }
  * }</pre>
  */
 public class UUID {
+
+    private UUID() {}
 
     /**
      * Registers the {@code entity:uuid} method on the given {@link MSMPNamespace}.

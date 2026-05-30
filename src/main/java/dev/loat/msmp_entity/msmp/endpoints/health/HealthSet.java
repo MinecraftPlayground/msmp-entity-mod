@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.health;
+package dev.loat.msmp_entity.msmp.endpoints.health;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
@@ -16,24 +16,38 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
  * Returns the actual values after the update.</p>
  *
  * <p>Example requests:</p>
- * <pre>{@code
- * // Set only health:
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:health/set",
- *   "params": [{ "name": "Steve", "health": 15.0 }] }
- *
- * // Set only max_health:
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:health/set",
- *   "params": [{ "name": "Steve", "max_health": 40.0 }] }
- *
- * // Set both:
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:health/set",
- *   "params": [{ "name": "Steve", "health": 15.0, "max_health": 40.0 }] }
- * }</pre>
+ * <pre><code>
+ * // Only set health
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:health/set",
+ *   "params": [{ "name": "Steve", "health": 15.0 }]
+ * }
+ * // Only set max health
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:health/set",
+ *   "params": [{ "name": "Steve", "max_health": 40.0 }]
+ * }
+ * // Set both
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:health/set",
+ *   "params": [{ "name": "Steve", "health": 15.0, "max_health": 40.0 }]
+ * }
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
- * { "entity": { "id": "069a...", "name": "Steve" }, "health": 15.0, "max_health": 40.0 }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "entity": { "id": "069a...", "name": "Steve" },
+ *   "health": 15.0,
+ *   "max_health": 40.0
+ * }
+ * </code></pre>
  */
 public class HealthSet {
 
@@ -47,13 +61,11 @@ public class HealthSet {
      * by Minecraft. If {@code health} is set, it is applied after {@code max_health} to ensure
      * the value is within the valid range.</p>
      *
-     * <p>Throws {@link IllegalArgumentException} if neither {@code health} nor
-     * {@code max_health} is provided, or if the entity is not a {@link LivingEntity}.</p>
-     *
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("health/set",
+        namespace.method(
+            "health/set",
             HealthSetRequest.SCHEMA,
             HealthResponse.SCHEMA,
             "Partially updates the health and/or maximum health of any LivingEntity",

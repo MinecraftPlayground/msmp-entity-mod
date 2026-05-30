@@ -12,23 +12,24 @@ import net.minecraft.world.entity.Entity;
  * Registers the {@code entity:dimension} MSMP method.
  * 
  * <p>Returns the current dimension of any loaded entity.</p>
+ * 
  * <p>Example request:</p>
- * <pre>{@code
+ * <pre><code>
  * {
  *   "jsonrpc": "2.0",
  *   "id": 1,
  *   "method": "entity:dimension",
  *   "params": [{ "name": "Steve" }]
  * }
- * }</pre>
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
+ * <pre><code>
  * { 
  *   "entity": { "id": "069a...", "name": "Steve" },
  *   "dimension": "minecraft:overworld"
  * }
- * }</pre>
+ * </code></pre>
  */
 public class Dimension {
 

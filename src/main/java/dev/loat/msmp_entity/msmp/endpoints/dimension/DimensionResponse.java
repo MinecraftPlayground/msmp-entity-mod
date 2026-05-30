@@ -11,12 +11,12 @@ import net.minecraft.server.jsonrpc.api.Schema;
  * Response payload for the {@code entity:dimension} and {@code entity:dimension/set} method.
  *
  * <p>Example response:</p>
- * <pre>{@code
+ * <pre><code>
  * {
  *   "entity": { "id": "069a79f4-44e9-4726-a5be-fca90e38aaf5", "name": "Steve" },
  *   "dimension": "minecraft:overworld"
  * }
- * }</pre>
+ * </code></pre>
  *
  * @param entity The entity reference; always includes UUID, name only for players
  * @param dimension The resource key of the dimension the entity is currently in

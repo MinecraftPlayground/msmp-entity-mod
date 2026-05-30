@@ -1,14 +1,15 @@
-package dev.loat.msmp_entity.msmp.methods.dimension.set;
+package dev.loat.msmp_entity.msmp.endpoints.dimension;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
-import dev.loat.msmp_entity.msmp.methods.dimension.DimensionResponse;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+
 
 /**
  * Registers the {@code entity:dimension/set} MSMP method.
@@ -17,13 +18,20 @@ import net.minecraft.world.level.Level;
  *
  * <p>Example request:</p>
  * <pre>{@code
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:dimension/set",
- *   "params": [{ "name": "Steve", "dimension": "minecraft:the_nether" }] }
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:dimension/set",
+ *   "params": [{ "name": "Steve", "dimension": "minecraft:the_nether" }]
+ * }
  * }</pre>
  *
  * <p>Example response:</p>
  * <pre>{@code
- * { "entity": { "id": "069a...", "name": "Steve" }, "dimension": "minecraft:the_nether" }
+ * { 
+ *   "entity": { "id": "069a...", "name": "Steve" },
+ *   "dimension": "minecraft:the_nether"
+ * }
  * }</pre>
  */
 public class DimensionSet {
@@ -31,10 +39,9 @@ public class DimensionSet {
     private DimensionSet() {}
 
     /**
-     * Registers the {@code entity:dimension/set} method on the given {@link MSMPNamespace}.
+     * Registers the {@code entity:dimension/set} method.
      *
-     * <p>The entity is teleported to the target dimension at its current position and rotation.
-     * Throws {@link IllegalArgumentException} if the dimension identifier is unknown.</p>
+     * <p>The entity is teleported to the target dimension at its current position and rotation.</p>
      *
      * @param namespace The namespace to register this method under
      */
@@ -47,10 +54,10 @@ public class DimensionSet {
                 try {
                     Entity entity = EntityResolver.resolveEntity(server, params);
 
-                    Identifier dimId = Identifier.parse(params.dimension());
+                    Identifier dimensionId = Identifier.parse(params.dimension());
                     ResourceKey<Level> dimKey = ResourceKey.create(
-                        net.minecraft.core.registries.Registries.DIMENSION,
-                        dimId
+                        Registries.DIMENSION,
+                        dimensionId
                     );
                     ServerLevel targetLevel = server.getLevel(dimKey);
                     if (targetLevel == null) {
@@ -79,3 +86,4 @@ public class DimensionSet {
         );
     }
 }
+

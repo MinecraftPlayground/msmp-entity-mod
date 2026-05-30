@@ -10,13 +10,13 @@ import net.minecraft.server.jsonrpc.api.Schema;
  * Payload for the {@code entity:notification/dimension/changed} notification.
  *
  * <p>Example JSON representation:</p>
- * <pre>{@code
+ * <pre><code>
  * {
  *   "entity": { "id": "069a...", "name": "Steve" },
  *   "from": "minecraft:overworld",
  *   "to": "minecraft:the_nether"
  * }
- * }</pre>
+ * </code></pre>
  *
  * @param entity The entity that changed dimension
  * @param from The dimension the entity came from

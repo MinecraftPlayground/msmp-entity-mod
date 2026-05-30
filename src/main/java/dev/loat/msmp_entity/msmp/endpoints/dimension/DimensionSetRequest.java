@@ -1,12 +1,13 @@
-package dev.loat.msmp_entity.msmp.methods.dimension.set;
+package dev.loat.msmp_entity.msmp.endpoints.dimension;
+
+import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import dev.loat.msmp_entity.msmp.components.EntityLookup;
-import net.minecraft.server.jsonrpc.api.Schema;
 
-import java.util.Optional;
+import net.minecraft.server.jsonrpc.api.Schema;
 
 
 /**
@@ -15,12 +16,12 @@ import java.util.Optional;
  * <p>Transfers the entity to the given dimension at its current position.</p>
  *
  * <p>Example JSON representation:</p>
- * <pre>{@code
+ * <pre><code>
  * { "name": "Steve", "dimension": "minecraft:the_nether" }
- * }</pre>
+ * </code></pre>
  *
- * @param id        The entity's UUID as a string, if provided
- * @param name      The player's in-game name, if provided (only works for online players)
+ * @param id The entity's UUID as a string, if provided
+ * @param name The player's in-game name, if provided (only works for online players)
  * @param dimension The target dimension resource key (e.g. {@code minecraft:the_nether})
  */
 public record DimensionSetRequest(
@@ -46,3 +47,4 @@ public record DimensionSetRequest(
         .withField("name", Schema.STRING_SCHEMA)
         .withField("dimension", Schema.STRING_SCHEMA);
 }
+
