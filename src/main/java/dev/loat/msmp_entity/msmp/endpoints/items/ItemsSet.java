@@ -1,5 +1,7 @@
 package dev.loat.msmp_entity.msmp.endpoints.items;
 
+import java.util.Map;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,7 +25,9 @@ import net.minecraft.world.item.ItemStack;
  * <p>Example request:</p>
  * <pre><code>
  * {
- *   "jsonrpc": "2.0", "id": 1, "method": "entity:items/set",
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:items/set",
  *   "params": [{
  *     "name": "Steve",
  *     "inventory": [
@@ -60,7 +64,8 @@ public class ItemsSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("items/set",
+        namespace.method(
+            "items/set",
             ItemsSetRequest.SCHEMA,
             ItemsResponse.SCHEMA,
             "Partially updates an online player's inventory using a diff approach",
@@ -108,12 +113,12 @@ public class ItemsSet {
 
                     if (req.equipment().isJsonObject()) {
                         var equipmentObj = req.equipment().getAsJsonObject();
-                        var equipmentSlots = java.util.Map.ofEntries(
-                            java.util.Map.entry("feet", 36),
-                            java.util.Map.entry("legs", 37),
-                            java.util.Map.entry("chest", 38),
-                            java.util.Map.entry("head", 39),
-                            java.util.Map.entry("offhand", 40)
+                        var equipmentSlots = Map.ofEntries(
+                            Map.entry("feet", 36),
+                            Map.entry("legs", 37),
+                            Map.entry("chest", 38),
+                            Map.entry("head", 39),
+                            Map.entry("offhand", 40)
                         );
 
                         for (var key : equipmentObj.keySet()) {
