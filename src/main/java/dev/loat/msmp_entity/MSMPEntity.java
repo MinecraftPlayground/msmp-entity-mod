@@ -4,8 +4,6 @@ import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp.MSMPServer;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.endpoints.Endpoints;
-import dev.loat.msmp_entity.msmp.methods.Methods;
-import dev.loat.msmp_entity.msmp.notifications.Notifications;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
@@ -39,9 +37,7 @@ public class MSMPEntity implements ModInitializer {
     public void onInitialize() {
         Logger.setLoggerClass(MSMPEntity.class);
 
-        Methods.register(NS);
         Endpoints.register(NS, () -> msmp);
-        Notifications.register(NS, () -> msmp);
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             NS.attach(server);

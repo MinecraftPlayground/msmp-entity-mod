@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.rotation;
+package dev.loat.msmp_entity.msmp.endpoints.rotation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,12 +14,15 @@ import java.util.Optional;
  * Request payload for the {@code entity:rotation/set} method.
  *
  * <p>Example JSON representation:</p>
- * <pre>{@code
- * { "name": "Steve", "rotation": [90.0, -15.0] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "name": "Steve",
+ *   "rotation": [90.0, -15.0]
+ * }
+ * </code></pre>
  *
- * @param id       The entity's UUID as a string, if provided
- * @param name     The player's in-game name, if provided (only works for online players)
+ * @param id The entity's UUID as a string, if provided
+ * @param name The player's in-game name, if provided (only works for online players)
  * @param rotation The target rotation as {@code [yaw, pitch]}
  */
 public record RotationSetRequest(

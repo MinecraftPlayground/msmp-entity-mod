@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.rotation;
+package dev.loat.msmp_entity.msmp.endpoints.rotation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -10,17 +10,17 @@ import java.util.List;
 
 
 /**
- * Response payload shared between {@code entity:rotation} and {@code entity:rotation/set}.
+ * Response payload for {@code entity:rotation} and {@code entity:rotation/set}.
  *
  * <p>Example JSON representation:</p>
- * <pre>{@code
+ * <pre><code>
  * {
  *   "entity":   { "id": "069a79f4-44e9-4726-a5be-fca90e38aaf5", "name": "Steve" },
  *   "rotation": [90.0, -15.0]
  * }
- * }</pre>
+ * </code></pre>
  *
- * @param entity   The entity reference; always includes UUID, name only for players
+ * @param entity The entity reference; always includes UUID, name only for players
  * @param rotation The entity's rotation as {@code [yaw, pitch]}
  */
 public record RotationResponse(EntityRef entity, List<Double> rotation) {

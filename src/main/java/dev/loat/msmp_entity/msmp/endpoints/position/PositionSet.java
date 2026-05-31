@@ -1,8 +1,9 @@
-package dev.loat.msmp_entity.msmp.methods.position;
+package dev.loat.msmp_entity.msmp.endpoints.position;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 
@@ -14,15 +15,22 @@ import java.util.List;
  * <p>Teleports the entity to the given position within its current dimension.</p>
  *
  * <p>Example request:</p>
- * <pre>{@code
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:position/set",
- *   "params": [{ "name": "Steve", "position": [100.0, 64.0, 200.0] }] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:position/set",
+ *   "params": [{ "name": "Steve", "position": [100.0, 64.0, 200.0] }]
+ * }
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
- * { "entity": { "id": "069a...", "name": "Steve" }, "position": [100.0, 64.0, 200.0] }
- * }</pre>
+ * <pre><code>
+ * { 
+ *   "entity": { "id": "069a...", "name": "Steve" },
+ *   "position": [100.0, 64.0, 200.0]
+ * }
+ * </code></pre>
  */
 public class PositionSet {
 
@@ -37,7 +45,8 @@ public class PositionSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("position/set",
+        namespace.method(
+            "position/set",
             PositionSetRequest.SCHEMA,
             PositionResponse.SCHEMA,
             "Teleports any loaded entity to the given position within its current dimension",

@@ -1,9 +1,10 @@
-package dev.loat.msmp_entity.msmp.methods.rotation;
+package dev.loat.msmp_entity.msmp.endpoints.rotation;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+
 import net.minecraft.world.entity.Entity;
 
 import java.util.List;
@@ -16,15 +17,22 @@ import java.util.List;
  * Players can be looked up by UUID or name; all other entities require a UUID.</p>
  *
  * <p>Example request:</p>
- * <pre>{@code
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:rotation",
- *   "params": [{ "name": "Steve" }] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:rotation",
+ *   "params": [{ "name": "Steve" }]
+ * }
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
- * { "entity": { "id": "069a...", "name": "Steve" }, "rotation": [90.0, -15.0] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "entity": { "id": "069a...", "name": "Steve" },
+ *   "rotation": [90.0, -15.0]
+ * }
+ * </code></pre>
  */
 public class Rotation {
 
@@ -39,7 +47,8 @@ public class Rotation {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("rotation",
+        namespace.method(
+            "rotation",
             EntityRequest.SCHEMA,
             RotationResponse.SCHEMA,
             "Returns the current rotation of any loaded entity by UUID, or a player by name",

@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.position;
+package dev.loat.msmp_entity.msmp.endpoints.position;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,12 +14,15 @@ import java.util.Optional;
  * Request payload for the {@code entity:position/set} method.
  *
  * <p>Example JSON representation:</p>
- * <pre>{@code
- * { "name": "Steve", "position": [100.0, 64.0, 200.0] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "name": "Steve",
+ *   "position": [100.0, 64.0, 200.0]
+ * }
+ * </code></pre>
  *
- * @param id       The entity's UUID as a string, if provided
- * @param name     The player's in-game name, if provided (only works for online players)
+ * @param id The entity's UUID as a string, if provided
+ * @param name The player's in-game name, if provided (only works for online players)
  * @param position The target position as {@code [x, y, z]}
  */
 public record PositionSetRequest(

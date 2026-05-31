@@ -11,6 +11,10 @@ import dev.loat.msmp_entity.msmp.endpoints.health.Health;
 import dev.loat.msmp_entity.msmp.endpoints.health.HealthSet;
 import dev.loat.msmp_entity.msmp.endpoints.items.Items;
 import dev.loat.msmp_entity.msmp.endpoints.items.ItemsSet;
+import dev.loat.msmp_entity.msmp.endpoints.position.Position;
+import dev.loat.msmp_entity.msmp.endpoints.position.PositionSet;
+import dev.loat.msmp_entity.msmp.endpoints.rotation.Rotation;
+import dev.loat.msmp_entity.msmp.endpoints.rotation.RotationSet;
 import dev.loat.msmp_entity.msmp.endpoints.uuid.UUID;
 
 import java.util.function.Supplier;
@@ -42,6 +46,12 @@ public class Endpoints {
 
         Items.register(namespace);
         ItemsSet.register(namespace);
+
+        Position.register(namespace);
+        PositionSet.register(namespace);
+
+        Rotation.register(namespace);
+        RotationSet.register(namespace);
 
         UUID.register(namespace);
     }

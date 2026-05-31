@@ -1,9 +1,10 @@
-package dev.loat.msmp_entity.msmp.methods.saturation;
+package dev.loat.msmp_entity.msmp.endpoints.saturation;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+
 import net.minecraft.world.entity.player.Player;
 
 
@@ -13,15 +14,23 @@ import net.minecraft.world.entity.player.Player;
  * <p>Returns the current food level and saturation of an online player.</p>
  *
  * <p>Example request:</p>
- * <pre>{@code
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:saturation",
- *   "params": [{ "name": "Steve" }] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:saturation",
+ *   "params": [{ "name": "Steve" }]
+ * }
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
- * { "entity": { "id": "069a...", "name": "Steve" }, "food": 18, "saturation": 5.0 }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "entity": { "id": "069a...", "name": "Steve" },
+ *   "food": 18,
+ *   "saturation": 5.0
+ * }
+ * </code></pre>
  */
 public class Saturation {
 
@@ -37,7 +46,8 @@ public class Saturation {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("saturation",
+        namespace.method(
+            "saturation",
             EntityRequest.SCHEMA,
             SaturationResponse.SCHEMA,
             "Returns the current food level and saturation of an online player",

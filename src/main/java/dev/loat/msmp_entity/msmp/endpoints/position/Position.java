@@ -1,12 +1,14 @@
-package dev.loat.msmp_entity.msmp.methods.position;
+package dev.loat.msmp_entity.msmp.endpoints.position;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+
 import net.minecraft.world.entity.Entity;
 
 import java.util.List;
+
 
 /**
  * Registers the {@code entity:position} MSMP method.
@@ -15,15 +17,22 @@ import java.util.List;
  * Players can be looked up by UUID or name; all other entities require a UUID.</p>
  *
  * <p>Example request:</p>
- * <pre>{@code
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:position",
- *   "params": [{ "name": "Steve" }] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:position",
+ *   "params": [{ "name": "Steve" }]
+ * }
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
- * { "entity": { "id": "069a...", "name": "Steve" }, "position": [128.5, 64.0, -32.3] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "entity": { "id": "069a...", "name": "Steve" },
+ *   "position": [128.5, 64.0, -32.3]
+ * }
+ * </code></pre>
  */
 public class Position {
 
@@ -38,10 +47,11 @@ public class Position {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("position",
+        namespace.method(
+            "position",
             EntityRequest.SCHEMA,
             PositionResponse.SCHEMA,
-            "Returns the current position of any loaded entity by UUID, or a player by name",
+            "Returns the current position of any loaded entity",
             (server, params, client) -> {
                 try {
                     Entity entity = EntityResolver.resolveEntity(server, params);

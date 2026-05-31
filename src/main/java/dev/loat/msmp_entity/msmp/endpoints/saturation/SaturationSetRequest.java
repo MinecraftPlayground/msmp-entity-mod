@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.saturation;
+package dev.loat.msmp_entity.msmp.endpoints.saturation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -16,15 +16,15 @@ import java.util.Optional;
  * Only the provided fields are updated; omitted fields remain unchanged.</p>
  *
  * <p>Example JSON representations:</p>
- * <pre>{@code
+ * <pre><code>
  * { "name": "Steve", "food": 20 }
  * { "name": "Steve", "saturation": 10.0 }
  * { "name": "Steve", "food": 20, "saturation": 10.0 }
- * }</pre>
+ * </code></pre>
  *
- * @param id         The entity's UUID as a string, if provided
- * @param name       The player's in-game name, if provided (only works for online players)
- * @param food       The new food level to set (0–20), if provided
+ * @param id The entity's UUID as a string, if provided
+ * @param name The player's in-game name, if provided (only works for online players)
+ * @param food The new food level to set (0–20), if provided
  * @param saturation The new saturation level to set (0.0–20.0), if provided
  */
 public record SaturationSetRequest(

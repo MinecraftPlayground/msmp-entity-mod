@@ -1,8 +1,9 @@
-package dev.loat.msmp_entity.msmp.methods.rotation;
+package dev.loat.msmp_entity.msmp.endpoints.rotation;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 
@@ -15,15 +16,22 @@ import java.util.List;
  * <p>Sets the rotation of any loaded entity. Position and dimension are preserved.</p>
  *
  * <p>Example request:</p>
- * <pre>{@code
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:rotation/set",
- *   "params": [{ "name": "Steve", "rotation": [90.0, -15.0] }] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:rotation/set",
+ *   "params": [{ "name": "Steve", "rotation": [90.0, -15.0] }]
+ * }
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
- * { "entity": { "id": "069a...", "name": "Steve" }, "rotation": [90.0, -15.0] }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "entity": { "id": "069a...", "name": "Steve" },
+ *   "rotation": [90.0, -15.0]
+ * }
+ * </code></pre>
  */
 public class RotationSet {
 
@@ -38,7 +46,8 @@ public class RotationSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("rotation/set",
+        namespace.method(
+            "rotation/set",
             RotationSetRequest.SCHEMA,
             RotationResponse.SCHEMA,
             "Sets the rotation of any loaded entity, preserving its position and dimension",

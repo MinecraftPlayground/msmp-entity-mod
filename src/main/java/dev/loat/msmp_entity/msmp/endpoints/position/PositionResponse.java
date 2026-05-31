@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.methods.position;
+package dev.loat.msmp_entity.msmp.endpoints.position;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -10,15 +10,15 @@ import java.util.List;
 
 
 /**
- * Response payload shared between {@code entity:position} and {@code entity:position/set}.
+ * Response payload for {@code entity:position} and {@code entity:position/set}.
  *
  * <p>Example JSON representation:</p>
- * <pre>{@code
+ * <pre><code>
  * {
  *   "entity":   { "id": "069a79f4-44e9-4726-a5be-fca90e38aaf5", "name": "Steve" },
  *   "position": [128.5, 64.0, -32.3]
  * }
- * }</pre>
+ * </code></pre>
  *
  * @param entity   The entity reference; always includes UUID, name only for players
  * @param position The entity's position as {@code [x, y, z]}

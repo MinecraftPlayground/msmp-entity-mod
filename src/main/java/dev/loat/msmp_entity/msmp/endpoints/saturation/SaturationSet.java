@@ -1,8 +1,9 @@
-package dev.loat.msmp_entity.msmp.methods.saturation;
+package dev.loat.msmp_entity.msmp.endpoints.saturation;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 
@@ -15,24 +16,40 @@ import net.minecraft.world.food.FoodData;
  * Returns the actual values after the update.</p>
  *
  * <p>Example requests:</p>
- * <pre>{@code
+ * <pre><code>
  * // Set only food:
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:saturation/set",
- *   "params": [{ "name": "Steve", "food": 20 }] }
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:saturation/set",
+ *   "params": [{ "name": "Steve", "food": 20 }]
+ * }
  *
  * // Set only saturation:
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:saturation/set",
- *   "params": [{ "name": "Steve", "saturation": 10.0 }] }
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:saturation/set",
+ *   "params": [{ "name": "Steve", "saturation": 10.0 }]
+ * }
  *
  * // Set both:
- * { "jsonrpc": "2.0", "id": 1, "method": "entity:saturation/set",
- *   "params": [{ "name": "Steve", "food": 20, "saturation": 10.0 }] }
- * }</pre>
+ * {
+ *   "jsonrpc": "2.0",
+ *   "id": 1,
+ *   "method": "entity:saturation/set",
+ *   "params": [{ "name": "Steve", "food": 20, "saturation": 10.0 }]
+ * }
+ * </code></pre>
  *
  * <p>Example response:</p>
- * <pre>{@code
- * { "entity": { "id": "069a...", "name": "Steve" }, "food": 20, "saturation": 10.0 }
- * }</pre>
+ * <pre><code>
+ * {
+ *   "entity": { "id": "069a...", "name": "Steve" },
+ *   "food": 20,
+ *   "saturation": 10.0
+ * }
+ * </code></pre>
  */
 public class SaturationSet {
 
@@ -44,13 +61,11 @@ public class SaturationSet {
      * <p>Food level is clamped to 0–20 by Minecraft internally.
      * Saturation is clamped to {@code 0.0–foodLevel} by Minecraft internally.</p>
      *
-     * <p>Throws {@link IllegalArgumentException} if neither {@code food} nor
-     * {@code saturation} is provided.</p>
-     *
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("saturation/set",
+        namespace.method(
+            "saturation/set",
             SaturationSetRequest.SCHEMA,
             SaturationResponse.SCHEMA,
             "Partially updates the food level and/or saturation of an online player",
