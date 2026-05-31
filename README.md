@@ -14,7 +14,6 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 | --------------------------------- | ----------------------------------------------------------------------- |
 | `entity:dimension`                | Returns the dimension/world of an entity.                               |
 | `entity:dimension/set`            | Changes the dimension of an entity.                                     |
-| `entity:dimension/changed`        | Subscribe to dimension change notifications.                            |
 | `entity:dimension/changed/add`    | Add entities to dimension change notifications.                         |
 | `entity:dimension/changed/remove` | Remove entities from dimension change notifications.                    |
 | `entity:health`                   | Returns the current and maximum health of a LivingEntity.               |
@@ -28,6 +27,14 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 | `entity:saturation`               | Returns the food level and saturation of a player.                      |
 | `entity:saturation/set`           | Sets the food level and saturation of a player.                         |
 | `entity:uuid`                     | Resolves or returns UUID information for players.                       |
+
+## RPC Notifications
+
+The mod also provides the following MSMP RPC notifications that clients can subscribe to:
+
+| Method                                  | Description                                   |
+| --------------------------------------- | --------------------------------------------- |
+| `entity:notification/dimension/changed` | Notifies about dimension changes of entities. |
 
 ## Installation
 
