@@ -2,6 +2,7 @@ package dev.loat.msmp_entity;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp.MSMPServer;
+import dev.loat.msmp_entity.config.Config;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.endpoints.Endpoints;
 import net.fabricmc.api.ModInitializer;
@@ -36,6 +37,8 @@ public class MSMPEntity implements ModInitializer {
     @Override
     public void onInitialize() {
         Logger.setLoggerClass(MSMPEntity.class);
+
+        Config.register();
 
         Endpoints.register(NS, () -> msmp);
 
