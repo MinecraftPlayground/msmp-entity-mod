@@ -1,16 +1,17 @@
-package dev.loat.msmp_entity.msmp.endpoints.position.changed;
+package dev.loat.msmp_entity.msmp.endpoints.health.changed;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity.msmp.components.EntityRef;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
-import dev.loat.msmp_entity.msmp.endpoints.position.notification.changed.PositionChanged;
+import dev.loat.msmp_entity.msmp.endpoints.health.notification.changed.HealthChanged;
 import dev.loat.msmp_entity.msmp.subscription.SubscribeRequest;
 import dev.loat.msmp_entity.msmp.subscription.SubscribeResponse;
 import dev.loat.msmp_entity.msmp.subscription.SubscriptionManager;
 
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,17 +21,16 @@ import java.util.UUID;
 
 
 /**
- * Registers the {@code entity:position/changed/add} MSMP subscription method.
+ * Registers the {@code entity:health/changed/add} MSMP subscription method.
  *
- * <p>Adds specified entities to the position change notification subscription list.
- * The cached last-position for each entity is reset on subscribe so that the first
- * poll establishes a fresh baseline rather than firing based on a stale value from
- * a previous subscription.</p>
+ * <p>Adds specified entities to the health change notification subscription list.
+ * Only {@link LivingEntity} instances are accepted — entities without health
+ * (e.g. dropped items, boats) are rejected with an error.</p>
  *
  * <p>Example request:</p>
  * <pre><code>
  * {
- *   "jsonrpc": "2.0", "id": 1, "method": "entity:position/changed/add",
+ *   "jsonrpc": "2.0", "id": 1, "method": "entity:health/changed/add",
  *   "params": [{ "entities": [{ "name": "Steve" }] }]
  * }
  * </code></pre>
@@ -40,27 +40,31 @@ import java.util.UUID;
  * { "subscribed": [{ "id": "069a...", "name": "Steve" }] }
  * </code></pre>
  */
-public class PositionChangedAdd {
+public class HealthChangedAdd {
 
-    private PositionChangedAdd() {}
+    private HealthChangedAdd() {}
 
     /**
-     * Registers the {@code entity:position/changed/add} method on the given {@link MSMPNamespace}.
+     * Registers the {@code entity:health/changed/add} method on the given {@link MSMPNamespace}.
+     *
+     * <p>Resolves the provided entities, validates they are {@link LivingEntity} instances,
+     * and adds them to the health change notification subscription list.
+     * If the entity list is empty, returns an empty response immediately.</p>
      *
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
         namespace.method(
-            "position/changed/add",
+            "health/changed/add",
             SubscribeRequest.SCHEMA,
             SubscribeResponse.SCHEMA,
-            "Add entities to the position change notification list",
+            "Add LivingEntities to the health change notification list",
             (server, params, client) -> {
                 if (params.entities().isEmpty()) {
                     return new SubscribeResponse(List.of());
                 }
 
-                SubscriptionManager manager = SubscriptionManager.get(PositionChanged.SUBSCRIPTION_KEY);
+                SubscriptionManager manager = SubscriptionManager.get(HealthChanged.SUBSCRIPTION_KEY);
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 
@@ -68,14 +72,20 @@ public class PositionChangedAdd {
                     try {
                         Entity entity = EntityResolver.resolveEntity(server, entry);
 
-                        // Reset last-known position so the first poll establishes a fresh baseline
+                        if (!(entity instanceof LivingEntity)) {
+                            throw new IllegalArgumentException(
+                                "Entity %s is not a LivingEntity and has no health".formatted(entity.getUUID())
+                            );
+                        }
+
+                        // Reset last-known health so the first poll establishes a fresh baseline
                         // rather than firing immediately based on a stale value from a previous subscription.
-                        PositionChanged.LAST_POSITIONS.remove(entity.getUUID());
+                        HealthChanged.LAST_HEALTH.remove(entity.getUUID());
 
                         uuids.add(entity.getUUID());
                         resolved.add(EntityResolver.toEntityRef(entity));
                     } catch (IllegalArgumentException e) {
-                        RPCConnectionLogger.warning(client.connectionId(), "entity:position/changed/add - " + e.getMessage());
+                        RPCConnectionLogger.warning(client.connectionId(), "entity:health/changed/add - " + e.getMessage());
                         throw e;
                     }
                 }
@@ -83,7 +93,7 @@ public class PositionChangedAdd {
                 manager.subscribe(uuids);
                 RPCConnectionLogger.info(
                     client.connectionId(),
-                    "entity:position/changed/add - added %s to the position change notification list".formatted(uuids)
+                    "entity:health/changed/add - added %s to the health change notification list".formatted(uuids)
                 );
                 return new SubscribeResponse(resolved);
             }

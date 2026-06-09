@@ -9,6 +9,9 @@ import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChangedRem
 import dev.loat.msmp_entity.msmp.endpoints.dimension.notification.changed.DimensionChanged;
 import dev.loat.msmp_entity.msmp.endpoints.health.Health;
 import dev.loat.msmp_entity.msmp.endpoints.health.HealthSet;
+import dev.loat.msmp_entity.msmp.endpoints.health.changed.HealthChangedAdd;
+import dev.loat.msmp_entity.msmp.endpoints.health.changed.HealthChangedRemove;
+import dev.loat.msmp_entity.msmp.endpoints.health.notification.changed.HealthChanged;
 import dev.loat.msmp_entity.msmp.endpoints.items.Items;
 import dev.loat.msmp_entity.msmp.endpoints.items.ItemsSet;
 import dev.loat.msmp_entity.msmp.endpoints.position.Position;
@@ -48,6 +51,9 @@ public class Endpoints {
 
         Health.register(namespace);
         HealthSet.register(namespace);
+        HealthChanged.register(namespace, msmpServer);
+        HealthChangedAdd.register(namespace);
+        HealthChangedRemove.register(namespace);
 
         Items.register(namespace);
         ItemsSet.register(namespace);

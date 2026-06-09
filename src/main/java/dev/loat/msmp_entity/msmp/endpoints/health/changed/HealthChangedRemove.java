@@ -1,11 +1,11 @@
-package dev.loat.msmp_entity.msmp.endpoints.position.changed;
+package dev.loat.msmp_entity.msmp.endpoints.health.changed;
 
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity.msmp.components.EntityRef;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
-import dev.loat.msmp_entity.msmp.endpoints.position.notification.changed.PositionChanged;
+import dev.loat.msmp_entity.msmp.endpoints.health.notification.changed.HealthChanged;
 import dev.loat.msmp_entity.msmp.subscription.SubscribeRequest;
 import dev.loat.msmp_entity.msmp.subscription.SubscribeResponse;
 import dev.loat.msmp_entity.msmp.subscription.SubscriptionManager;
@@ -20,17 +20,15 @@ import java.util.UUID;
 
 
 /**
- * Registers the {@code entity:position/changed/add} MSMP subscription method.
+ * Registers the {@code entity:health/changed/remove} MSMP subscription method.
  *
- * <p>Adds specified entities to the position change notification subscription list.
- * The cached last-position for each entity is reset on subscribe so that the first
- * poll establishes a fresh baseline rather than firing based on a stale value from
- * a previous subscription.</p>
+ * <p>Removes specified entities from the health change notification subscription list
+ * and clears their cached last-health values to free memory.</p>
  *
  * <p>Example request:</p>
  * <pre><code>
  * {
- *   "jsonrpc": "2.0", "id": 1, "method": "entity:position/changed/add",
+ *   "jsonrpc": "2.0", "id": 1, "method": "entity:health/changed/remove",
  *   "params": [{ "entities": [{ "name": "Steve" }] }]
  * }
  * </code></pre>
@@ -40,50 +38,51 @@ import java.util.UUID;
  * { "subscribed": [{ "id": "069a...", "name": "Steve" }] }
  * </code></pre>
  */
-public class PositionChangedAdd {
+public class HealthChangedRemove {
 
-    private PositionChangedAdd() {}
+    private HealthChangedRemove() {}
 
     /**
-     * Registers the {@code entity:position/changed/add} method on the given {@link MSMPNamespace}.
+     * Registers the {@code entity:health/changed/remove} method on the given {@link MSMPNamespace}.
+     *
+     * <p>Resolves the provided entities, removes them from the subscription list,
+     * and clears their cached health values.
+     * If the entity list is empty, returns an empty response immediately.</p>
      *
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
         namespace.method(
-            "position/changed/add",
+            "health/changed/remove",
             SubscribeRequest.SCHEMA,
             SubscribeResponse.SCHEMA,
-            "Add entities to the position change notification list",
+            "Remove entities from the health change notification list",
             (server, params, client) -> {
                 if (params.entities().isEmpty()) {
                     return new SubscribeResponse(List.of());
                 }
 
-                SubscriptionManager manager = SubscriptionManager.get(PositionChanged.SUBSCRIPTION_KEY);
+                SubscriptionManager manager = SubscriptionManager.get(HealthChanged.SUBSCRIPTION_KEY);
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 
                 for (EntityRequest entry : params.entities()) {
                     try {
                         Entity entity = EntityResolver.resolveEntity(server, entry);
-
-                        // Reset last-known position so the first poll establishes a fresh baseline
-                        // rather than firing immediately based on a stale value from a previous subscription.
-                        PositionChanged.LAST_POSITIONS.remove(entity.getUUID());
-
                         uuids.add(entity.getUUID());
                         resolved.add(EntityResolver.toEntityRef(entity));
                     } catch (IllegalArgumentException e) {
-                        RPCConnectionLogger.warning(client.connectionId(), "entity:position/changed/add - " + e.getMessage());
+                        RPCConnectionLogger.warning(client.connectionId(), "entity:health/changed/remove - " + e.getMessage());
                         throw e;
                     }
                 }
 
-                manager.subscribe(uuids);
+                manager.unsubscribe(uuids);
+                uuids.forEach(HealthChanged.LAST_HEALTH::remove);
+
                 RPCConnectionLogger.info(
                     client.connectionId(),
-                    "entity:position/changed/add - added %s to the position change notification list".formatted(uuids)
+                    "entity:health/changed/remove - removed %s from the health change notification list".formatted(uuids)
                 );
                 return new SubscribeResponse(resolved);
             }
