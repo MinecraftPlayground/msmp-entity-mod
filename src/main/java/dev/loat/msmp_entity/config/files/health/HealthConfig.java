@@ -8,7 +8,7 @@ public class HealthConfig {
     @Annotation.Comment("Settings for notifications.")
     public Notification notification = new Notification();
 
-    public class Notification {
+    public static class Notification {
 
         @Annotation.Comment("""
             Number of server ticks between health change checks for subscribed entities.

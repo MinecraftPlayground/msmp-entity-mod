@@ -4,11 +4,11 @@ import dev.loat.config_lib.annotation.Annotation;
 
 
 public class PositionConfig {
-    
+
     @Annotation.Comment("Settings for notifications.")
     public Notification notification = new Notification();
 
-    public class Notification {
+    public static class Notification {
 
         @Annotation.Comment("""
             Number of server ticks between position change checks for subscribed entities.
