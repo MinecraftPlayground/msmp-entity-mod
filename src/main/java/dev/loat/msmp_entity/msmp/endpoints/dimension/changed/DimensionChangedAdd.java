@@ -5,10 +5,10 @@ import dev.loat.msmp_entity.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity.msmp.components.EntityRef;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
-import dev.loat.msmp_entity.msmp.subscription.SubscribeRequest;
-import dev.loat.msmp_entity.msmp.subscription.SubscribeResponse;
-import dev.loat.msmp_entity.msmp.subscription.SubscriptionManager;
-
+import dev.loat.msmp_entity.msmp.endpoints.dimension.notification.changed.DimensionChanged;
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTracker;
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerRequest;
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerResponse;
 import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
@@ -19,50 +19,26 @@ import java.util.UUID;
 
 
 /**
- * Registers the {@code entity:dimension/changed/add} MSMP subscription method.
+ * Registers the {@code entity:dimension/changed/add} MSMP method.
  *
- * <p>Adds specified entities to the dimension change notification subscription list.
- * When a subscribed entity changes dimensions, clients receive notifications. This method
- * allows clients to subscribe to receiving notifications for the given entities.</p>
- *
- * <p>Example request:</p>
- * <pre><code>
- * {
- *   "jsonrpc": "2.0", "id": 1, "method": "entity:dimension/changed/add",
- *   "params": [{ "entities": [{ "uuid": "069a79f4-44e9-4726-a5be-fca90e38aaf5" }] }]
- * }
- * </code></pre>
- *
- * <p>Example response:</p>
- * <pre><code>
- * { "id": "069a79f4-44e9-4726-a5be-fca90e38aaf5", "name": "Steve" }
- * </code></pre>
+ * <p>Adds entities to the dimension change notification tracker.</p>
  */
 public class DimensionChangedAdd {
 
     private DimensionChangedAdd() {}
 
-    /**
-     * Registers the {@code entity:dimension/changed/add} method on the given {@link MSMPNamespace}.
-     *
-     * <p>Resolves the provided entities and adds them to the dimension change notification
-     * subscription list. If the entity list is empty, returns an empty response immediately.
-     * Throws {@link IllegalArgumentException} if any entity cannot be resolved.</p>
-     *
-     * @param namespace The namespace to register this method under
-     */
     public static void register(MSMPNamespace namespace) {
         namespace.method(
             "dimension/changed/add",
-            SubscribeRequest.SCHEMA,
-            SubscribeResponse.SCHEMA,
-            "Add entities to the dimension change notification list",
+            EntityTrackerRequest.SCHEMA,
+            EntityTrackerResponse.SCHEMA,
+            "Add entities to the dimension change notification tracker",
             (server, params, client) -> {
                 if (params.entities().isEmpty()) {
-                    return new SubscribeResponse(List.of());
+                    return new EntityTrackerResponse(List.of());
                 }
 
-                SubscriptionManager manager = SubscriptionManager.get("entity:notification/dimension/changed");
+                EntityTracker entityTracker = EntityTracker.get(DimensionChanged.TRACKER_KEY);
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 
@@ -77,12 +53,10 @@ public class DimensionChangedAdd {
                     }
                 }
 
-                manager.subscribe(uuids);
-                RPCConnectionLogger.info(
-                    client.connectionId(),
-                    "entity:dimension/changed/add - added %s to the dimension change notification list".formatted(uuids)
-                );
-                return new SubscribeResponse(resolved);
+                entityTracker.add(uuids);
+                RPCConnectionLogger.info(client.connectionId(),
+                    "entity:dimension/changed/add - added %s".formatted(uuids));
+                return new EntityTrackerResponse(resolved);
             }
         );
     }

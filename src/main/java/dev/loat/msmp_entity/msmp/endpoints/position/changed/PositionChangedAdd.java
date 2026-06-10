@@ -6,10 +6,9 @@ import dev.loat.msmp_entity.msmp.components.EntityRef;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
 import dev.loat.msmp_entity.msmp.endpoints.position.notification.changed.PositionChanged;
-import dev.loat.msmp_entity.msmp.subscription.SubscribeRequest;
-import dev.loat.msmp_entity.msmp.subscription.SubscribeResponse;
-import dev.loat.msmp_entity.msmp.subscription.SubscriptionManager;
-
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTracker;
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerRequest;
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerResponse;
 import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
@@ -20,58 +19,34 @@ import java.util.UUID;
 
 
 /**
- * Registers the {@code entity:position/changed/add} MSMP subscription method.
+ * Registers the {@code entity:position/changed/add} MSMP method.
  *
- * <p>Adds specified entities to the position change notification subscription list.
- * The cached last-position for each entity is reset on subscribe so that the first
- * poll establishes a fresh baseline rather than firing based on a stale value from
- * a previous subscription.</p>
- *
- * <p>Example request:</p>
- * <pre><code>
- * {
- *   "jsonrpc": "2.0", "id": 1, "method": "entity:position/changed/add",
- *   "params": [{ "entities": [{ "name": "Steve" }] }]
- * }
- * </code></pre>
- *
- * <p>Example response:</p>
- * <pre><code>
- * { "subscribed": [{ "id": "069a...", "name": "Steve" }] }
- * </code></pre>
+ * <p>Adds entities to the position change notification tracker.
+ * The last-position baseline is reset on add to avoid stale notifications.</p>
  */
 public class PositionChangedAdd {
 
     private PositionChangedAdd() {}
 
-    /**
-     * Registers the {@code entity:position/changed/add} method on the given {@link MSMPNamespace}.
-     *
-     * @param namespace The namespace to register this method under
-     */
     public static void register(MSMPNamespace namespace) {
         namespace.method(
             "position/changed/add",
-            SubscribeRequest.SCHEMA,
-            SubscribeResponse.SCHEMA,
-            "Add entities to the position change notification list",
+            EntityTrackerRequest.SCHEMA,
+            EntityTrackerResponse.SCHEMA,
+            "Add entities to the position change notification tracker",
             (server, params, client) -> {
                 if (params.entities().isEmpty()) {
-                    return new SubscribeResponse(List.of());
+                    return new EntityTrackerResponse(List.of());
                 }
 
-                SubscriptionManager manager = SubscriptionManager.get(PositionChanged.SUBSCRIPTION_KEY);
+                EntityTracker entityTracker = EntityTracker.get(PositionChanged.TRACKER_KEY);
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 
                 for (EntityRequest entry : params.entities()) {
                     try {
                         Entity entity = EntityResolver.resolveEntity(server, entry);
-
-                        // Reset last-known position so the first poll establishes a fresh baseline
-                        // rather than firing immediately based on a stale value from a previous subscription.
                         PositionChanged.LAST_POSITIONS.remove(entity.getUUID());
-
                         uuids.add(entity.getUUID());
                         resolved.add(EntityResolver.toEntityRef(entity));
                     } catch (IllegalArgumentException e) {
@@ -80,12 +55,10 @@ public class PositionChangedAdd {
                     }
                 }
 
-                manager.subscribe(uuids);
-                RPCConnectionLogger.info(
-                    client.connectionId(),
-                    "entity:position/changed/add - added %s to the position change notification list".formatted(uuids)
-                );
-                return new SubscribeResponse(resolved);
+                entityTracker.add(uuids);
+                RPCConnectionLogger.info(client.connectionId(),
+                    "entity:position/changed/add - added %s".formatted(uuids));
+                return new EntityTrackerResponse(resolved);
             }
         );
     }

@@ -6,10 +6,9 @@ import dev.loat.msmp_entity.msmp.components.EntityRef;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
 import dev.loat.msmp_entity.msmp.endpoints.health.notification.changed.HealthChanged;
-import dev.loat.msmp_entity.msmp.subscription.SubscribeRequest;
-import dev.loat.msmp_entity.msmp.subscription.SubscribeResponse;
-import dev.loat.msmp_entity.msmp.subscription.SubscriptionManager;
-
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTracker;
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerRequest;
+import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerResponse;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -21,46 +20,27 @@ import java.util.UUID;
 
 
 /**
- * Registers the {@code entity:health/changed/add} MSMP subscription method.
+ * Registers the {@code entity:health/changed/add} MSMP method.
  *
- * <p>Adds specified entities to the health change notification subscription list.
- * Only {@link LivingEntity} instances are accepted — entities without health
- * are rejected with an error.</p>
- *
- * <p>Example request:</p>
- * <pre><code>
- * {
- *   "jsonrpc": "2.0", "id": 1, "method": "entity:health/changed/add",
- *   "params": [{ "entities": [{ "name": "Steve" }] }]
- * }
- * </code></pre>
- *
- * <p>Example response:</p>
- * <pre><code>
- * { "subscribed": [{ "id": "069a...", "name": "Steve" }] }
- * </code></pre>
+ * <p>Adds {@link LivingEntity} instances to the health change notification tracker.
+ * Non-living entities are rejected immediately.</p>
  */
 public class HealthChangedAdd {
 
     private HealthChangedAdd() {}
 
-    /**
-     * Registers the {@code entity:health/changed/add} method on the given {@link MSMPNamespace}.
-     *
-     * @param namespace The namespace to register this method under
-     */
     public static void register(MSMPNamespace namespace) {
         namespace.method(
             "health/changed/add",
-            SubscribeRequest.SCHEMA,
-            SubscribeResponse.SCHEMA,
-            "Add LivingEntities to the health change notification list",
+            EntityTrackerRequest.SCHEMA,
+            EntityTrackerResponse.SCHEMA,
+            "Add LivingEntities to the health change notification tracker",
             (server, params, client) -> {
                 if (params.entities().isEmpty()) {
-                    return new SubscribeResponse(List.of());
+                    return new EntityTrackerResponse(List.of());
                 }
 
-                SubscriptionManager manager = SubscriptionManager.get(HealthChanged.SUBSCRIPTION_KEY);
+                EntityTracker entityTracker = EntityTracker.get(HealthChanged.TRACKER_KEY);
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 
@@ -82,12 +62,10 @@ public class HealthChangedAdd {
                     }
                 }
 
-                manager.subscribe(uuids);
-                RPCConnectionLogger.info(
-                    client.connectionId(),
-                    "entity:health/changed/add - added %s to the health change notification list".formatted(uuids)
-                );
-                return new SubscribeResponse(resolved);
+                entityTracker.add(uuids);
+                RPCConnectionLogger.info(client.connectionId(),
+                    "entity:health/changed/add - added %s".formatted(uuids));
+                return new EntityTrackerResponse(resolved);
             }
         );
     }

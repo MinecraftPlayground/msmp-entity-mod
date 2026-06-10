@@ -1,4 +1,4 @@
-package dev.loat.msmp_entity.msmp.subscription;
+package dev.loat.msmp_entity.msmp.entity_tracker;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -22,12 +22,12 @@ import java.util.List;
  *
  * @param entities List of entity lookups to subscribe to
  */
-public record SubscribeRequest(List<EntityRequest> entities) {
+public record EntityTrackerRequest(List<EntityRequest> entities) {
 
-    public static final Codec<SubscribeRequest> CODEC = RecordCodecBuilder.create(i -> i.group(
-        EntityRequest.CODEC.listOf().fieldOf("entities").forGetter(SubscribeRequest::entities)
-    ).apply(i, SubscribeRequest::new));
+    public static final Codec<EntityTrackerRequest> CODEC = RecordCodecBuilder.create(i -> i.group(
+        EntityRequest.CODEC.listOf().fieldOf("entities").forGetter(EntityTrackerRequest::entities)
+    ).apply(i, EntityTrackerRequest::new));
 
-    public static final Schema<SubscribeRequest> SCHEMA = Schema.record(CODEC)
+    public static final Schema<EntityTrackerRequest> SCHEMA = Schema.record(CODEC)
         .withField("entities", Schema.ofType("array", EntityRequest.CODEC.listOf()));
 }
