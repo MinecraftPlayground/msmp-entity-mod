@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.loat.msmp_entity.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LivingEntitySetHealthMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

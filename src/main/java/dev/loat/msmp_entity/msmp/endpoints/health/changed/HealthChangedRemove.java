@@ -22,8 +22,7 @@ import java.util.UUID;
 /**
  * Registers the {@code entity:health/changed/remove} MSMP subscription method.
  *
- * <p>Removes specified entities from the health change notification subscription list
- * and clears their cached last-health values to free memory.</p>
+ * <p>Removes specified entities from the health change notification subscription list.</p>
  *
  * <p>Example request:</p>
  * <pre><code>
@@ -44,10 +43,6 @@ public class HealthChangedRemove {
 
     /**
      * Registers the {@code entity:health/changed/remove} method on the given {@link MSMPNamespace}.
-     *
-     * <p>Resolves the provided entities, removes them from the subscription list,
-     * and clears their cached health values.
-     * If the entity list is empty, returns an empty response immediately.</p>
      *
      * @param namespace The namespace to register this method under
      */
@@ -78,8 +73,6 @@ public class HealthChangedRemove {
                 }
 
                 manager.unsubscribe(uuids);
-                uuids.forEach(HealthChanged.LAST_HEALTH::remove);
-
                 RPCConnectionLogger.info(
                     client.connectionId(),
                     "entity:health/changed/remove - removed %s from the health change notification list".formatted(uuids)

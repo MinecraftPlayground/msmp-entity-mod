@@ -25,7 +25,7 @@ import java.util.UUID;
  *
  * <p>Adds specified entities to the health change notification subscription list.
  * Only {@link LivingEntity} instances are accepted — entities without health
- * (e.g. dropped items, boats) are rejected with an error.</p>
+ * are rejected with an error.</p>
  *
  * <p>Example request:</p>
  * <pre><code>
@@ -46,10 +46,6 @@ public class HealthChangedAdd {
 
     /**
      * Registers the {@code entity:health/changed/add} method on the given {@link MSMPNamespace}.
-     *
-     * <p>Resolves the provided entities, validates they are {@link LivingEntity} instances,
-     * and adds them to the health change notification subscription list.
-     * If the entity list is empty, returns an empty response immediately.</p>
      *
      * @param namespace The namespace to register this method under
      */
@@ -77,10 +73,6 @@ public class HealthChangedAdd {
                                 "Entity %s is not a LivingEntity and has no health".formatted(entity.getUUID())
                             );
                         }
-
-                        // Reset last-known health so the first poll establishes a fresh baseline
-                        // rather than firing immediately based on a stale value from a previous subscription.
-                        HealthChanged.LAST_HEALTH.remove(entity.getUUID());
 
                         uuids.add(entity.getUUID());
                         resolved.add(EntityResolver.toEntityRef(entity));

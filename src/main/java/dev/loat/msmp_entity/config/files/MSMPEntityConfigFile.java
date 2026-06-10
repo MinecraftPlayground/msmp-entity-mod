@@ -1,7 +1,6 @@
 package dev.loat.msmp_entity.config.files;
 
 import dev.loat.config_lib.annotation.Annotation;
-import dev.loat.msmp_entity.config.files.health.HealthConfig;
 import dev.loat.msmp_entity.config.files.position.PositionConfig;
 
 
@@ -10,9 +9,6 @@ import dev.loat.msmp_entity.config.files.position.PositionConfig;
 """)
 public class MSMPEntityConfigFile {
     private MSMPEntityConfigFile() {}
-
-    @Annotation.Comment("Configuration for health-related settings.")
-    public HealthConfig health = new HealthConfig();
 
     @Annotation.Comment("Configuration for position-related settings.")
     public PositionConfig position = new PositionConfig();
