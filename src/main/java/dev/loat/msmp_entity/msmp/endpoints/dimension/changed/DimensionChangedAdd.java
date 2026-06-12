@@ -5,7 +5,7 @@ import dev.loat.msmp_entity.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity.msmp.components.EntityRef;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
-import dev.loat.msmp_entity.msmp.endpoints.dimension.notification.changed.DimensionChanged;
+import dev.loat.msmp_entity.msmp.endpoints.dimension.notification.changed.NotificationDimensionChanged;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTracker;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerRequest;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerResponse;
@@ -38,7 +38,7 @@ public class DimensionChangedAdd {
                     return new EntityTrackerResponse(List.of());
                 }
 
-                EntityTracker entityTracker = EntityTracker.get(DimensionChanged.TRACKER_KEY);
+                EntityTracker entityTracker = EntityTracker.get(NotificationDimensionChanged.TRACKER_KEY);
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 

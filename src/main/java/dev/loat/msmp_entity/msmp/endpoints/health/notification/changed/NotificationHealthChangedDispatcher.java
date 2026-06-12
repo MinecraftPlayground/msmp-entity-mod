@@ -15,21 +15,21 @@ import java.util.function.Supplier;
  * whenever {@code LivingEntity#setHealth(float)} is invoked.
  *
  * <p>Decouples the Mixin from the notification infrastructure.
- * Initialized once in {@link HealthChanged#register}.</p>
+ * Initialized once in {@link NotificationHealthChanged#register}.</p>
  */
-public final class HealthChangedDispatcher {
+public final class NotificationHealthChangedDispatcher {
 
-    private static MSMPNotification<HealthChangedPayload> notification;
+    private static MSMPNotification<NotificationHealthChangedPayload> notification;
     private static Supplier<MSMPServer> msmpServer;
 
-    private HealthChangedDispatcher() {}
+    private NotificationHealthChangedDispatcher() {}
 
     static void init(
-        MSMPNotification<HealthChangedPayload> notification,
+        MSMPNotification<NotificationHealthChangedPayload> notification,
         Supplier<MSMPServer> msmpServer
     ) {
-        HealthChangedDispatcher.notification = notification;
-        HealthChangedDispatcher.msmpServer = msmpServer;
+        NotificationHealthChangedDispatcher.notification = notification;
+        NotificationHealthChangedDispatcher.msmpServer = msmpServer;
     }
 
     /**
@@ -42,12 +42,12 @@ public final class HealthChangedDispatcher {
         if (notification == null || msmpServer == null) return;
         if (oldHealth == newHealth) return;
 
-        if (!EntityTracker.get(HealthChanged.TRACKER_KEY).contains(entity.getUUID())) return;
+        if (!EntityTracker.get(NotificationHealthChanged.TRACKER_KEY).contains(entity.getUUID())) return;
 
         MSMPServer server = msmpServer.get();
         if (server == null) return;
 
-        server.send(notification, new HealthChangedPayload(
+        server.send(notification, new NotificationHealthChangedPayload(
             EntityResolver.toEntityRef(entity),
             oldHealth,
             newHealth,

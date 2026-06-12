@@ -5,7 +5,7 @@ import dev.loat.msmp_entity.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity.msmp.components.EntityRef;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
-import dev.loat.msmp_entity.msmp.endpoints.health.notification.changed.HealthChanged;
+import dev.loat.msmp_entity.msmp.endpoints.health.notification.changed.NotificationHealthChanged;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTracker;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerRequest;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerResponse;
@@ -40,7 +40,7 @@ public class HealthChangedAdd {
                     return new EntityTrackerResponse(List.of());
                 }
 
-                EntityTracker entityTracker = EntityTracker.get(HealthChanged.TRACKER_KEY);
+                EntityTracker entityTracker = EntityTracker.get(NotificationHealthChanged.TRACKER_KEY);
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 

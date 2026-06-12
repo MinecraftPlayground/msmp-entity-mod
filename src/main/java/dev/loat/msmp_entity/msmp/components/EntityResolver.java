@@ -23,18 +23,11 @@ public final class EntityResolver {
     /**
      * Resolves any {@link Entity} from the given {@link EntityLookup}.
      *
-     * <p>Lookup order:</p>
-     * <ol>
-     *   <li>By UUID via {@code server.getPlayerList().getPlayer(UUID)} (players only, fast path)</li>
-     *   <li>By UUID via level entity lookup across all loaded levels</li>
-     *   <li>By name via {@code server.getPlayerList().getPlayerByName(String)} (players only)</li>
-     * </ol>
-     *
      * @param server  The running {@link MinecraftServer} instance
      * @param lookup  Any request implementing {@link EntityLookup}
      * @return The resolved {@link Entity}
      * @throws IllegalArgumentException if neither field is provided, the UUID is malformed,
-     *                                  or no matching entity is found
+     * or no matching entity is found
      */
     public static Entity resolveEntity(MinecraftServer server, EntityLookup lookup) {
         if (lookup.id().isEmpty() && lookup.name().isEmpty()) {
@@ -77,6 +70,36 @@ public final class EntityResolver {
         }
 
         return entity;
+    }
+
+    /**
+     * Resolves any {@link Entity} by its UUID directly.
+     *
+     * <p>Lookup order:</p>
+     * <ol>
+     *   <li>By UUID via {@code server.getPlayerList().getPlayer(UUID)} (players only, fast path)</li>
+     *   <li>By UUID via level entity lookup across all loaded levels</li>
+     * </ol>
+     *
+     * @param server The running {@link MinecraftServer} instance
+     * @param uuid The UUID of the entity to resolve
+     * @return The resolved {@link Entity}
+     * @throws IllegalArgumentException if no matching entity is found
+     */
+    public static Entity resolveEntityByUUID(MinecraftServer server, UUID uuid) {
+        return EntityResolver.resolveEntity(server, new EntityRequest(Optional.of(uuid.toString()), Optional.empty()));
+    }
+
+    /**
+     * Resolves any {@link Entity} by its UUID directly.
+     *
+     * @param server The running {@link MinecraftServer} instance
+     * @param uuid The UUID of the entity to resolve
+     * @return The resolved {@link Entity}
+     * @throws IllegalArgumentException if no matching entity is found
+     */
+    public static Entity resolveEntityByUUID(MinecraftServer server, String uuid) {
+        return EntityResolver.resolveEntity(server, new EntityRequest(Optional.of(uuid), Optional.empty()));
     }
 
     /**

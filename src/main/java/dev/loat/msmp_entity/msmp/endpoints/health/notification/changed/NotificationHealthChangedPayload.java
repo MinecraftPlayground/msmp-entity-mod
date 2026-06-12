@@ -29,18 +29,18 @@ import net.minecraft.server.jsonrpc.api.Schema;
  * @param to        The current health
  * @param maxHealth The entity's current maximum health
  */
-public record HealthChangedPayload(EntityRef entity, double from, double to, double maxHealth) {
+public record NotificationHealthChangedPayload(EntityRef entity, double from, double to, double maxHealth) {
 
-    /** Codec for serializing and deserializing {@link HealthChangedPayload} instances. */
-    public static final Codec<HealthChangedPayload> CODEC = RecordCodecBuilder.create(i -> i.group(
-        EntityRef.CODEC.fieldOf("entity").forGetter(HealthChangedPayload::entity),
-        Codec.DOUBLE.fieldOf("from").forGetter(HealthChangedPayload::from),
-        Codec.DOUBLE.fieldOf("to").forGetter(HealthChangedPayload::to),
-        Codec.DOUBLE.fieldOf("max_health").forGetter(HealthChangedPayload::maxHealth)
-    ).apply(i, HealthChangedPayload::new));
+    /** Codec for serializing and deserializing {@link NotificationHealthChangedPayload} instances. */
+    public static final Codec<NotificationHealthChangedPayload> CODEC = RecordCodecBuilder.create(i -> i.group(
+        EntityRef.CODEC.fieldOf("entity").forGetter(NotificationHealthChangedPayload::entity),
+        Codec.DOUBLE.fieldOf("from").forGetter(NotificationHealthChangedPayload::from),
+        Codec.DOUBLE.fieldOf("to").forGetter(NotificationHealthChangedPayload::to),
+        Codec.DOUBLE.fieldOf("max_health").forGetter(NotificationHealthChangedPayload::maxHealth)
+    ).apply(i, NotificationHealthChangedPayload::new));
 
-    /** MSMP schema for {@link HealthChangedPayload}, used for protocol discovery. */
-    public static final Schema<HealthChangedPayload> SCHEMA = Schema.record(CODEC)
+    /** MSMP schema for {@link NotificationHealthChangedPayload}, used for protocol discovery. */
+    public static final Schema<NotificationHealthChangedPayload> SCHEMA = Schema.record(CODEC)
         .withField("entity", EntityRef.SCHEMA)
         .withField("from", Schema.NUMBER_SCHEMA)
         .withField("to", Schema.NUMBER_SCHEMA)

@@ -18,17 +18,17 @@ import net.minecraft.world.entity.Entity;
  *
  * <p>Fires when a tracked entity changes dimension.</p>
  */
-public class DimensionChanged {
+public class NotificationDimensionChanged {
 
     public static final String TRACKER_KEY = "entity:notification/dimension/changed";
 
-    private DimensionChanged() {}
+    private NotificationDimensionChanged() {}
 
     public static void register(MSMPNamespace namespace, Supplier<MSMPServer> msmpServer) {
-        MSMPNotification<DimensionChangedPayload> notification =
+        MSMPNotification<NotificationDimensionChangedPayload> notification =
             namespace.notification(
                 "dimension/changed",
-                DimensionChangedPayload.SCHEMA,
+                NotificationDimensionChangedPayload.SCHEMA,
                 "Fires when a tracked entity changes dimension"
             );
 
@@ -45,7 +45,7 @@ public class DimensionChanged {
 
     private static void dispatch(
         Supplier<MSMPServer> msmpServer,
-        MSMPNotification<DimensionChangedPayload> notification,
+        MSMPNotification<NotificationDimensionChangedPayload> notification,
         Entity entity,
         ServerLevel origin,
         ServerLevel destination
@@ -55,7 +55,7 @@ public class DimensionChanged {
 
         if (!EntityTracker.get(TRACKER_KEY).contains(entity.getUUID())) return;
 
-        server.send(notification, new DimensionChangedPayload(
+        server.send(notification, new NotificationDimensionChangedPayload(
             EntityResolver.toEntityRef(entity),
             origin.dimension().identifier().toString(),
             destination.dimension().identifier().toString()

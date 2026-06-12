@@ -27,20 +27,20 @@ import java.util.List;
  * @param from The position at the time of the last notification (or subscription time)
  * @param to The current position
  */
-public record PositionChangedPayload(EntityRef entity, List<Double> from, List<Double> to) {
+public record NotificationPositionChangedPayload(EntityRef entity, List<Double> from, List<Double> to) {
 
     private static final Schema<List<Double>> POSITION_SCHEMA =
         Schema.ofType("array", Codec.DOUBLE.listOf());
 
-    /** Codec for serializing and deserializing {@link PositionChangedPayload} instances. */
-    public static final Codec<PositionChangedPayload> CODEC = RecordCodecBuilder.create(i -> i.group(
-        EntityRef.CODEC.fieldOf("entity").forGetter(PositionChangedPayload::entity),
-        Codec.DOUBLE.listOf().fieldOf("from").forGetter(PositionChangedPayload::from),
-        Codec.DOUBLE.listOf().fieldOf("to").forGetter(PositionChangedPayload::to)
-    ).apply(i, PositionChangedPayload::new));
+    /** Codec for serializing and deserializing {@link NotificationPositionChangedPayload} instances. */
+    public static final Codec<NotificationPositionChangedPayload> CODEC = RecordCodecBuilder.create(i -> i.group(
+        EntityRef.CODEC.fieldOf("entity").forGetter(NotificationPositionChangedPayload::entity),
+        Codec.DOUBLE.listOf().fieldOf("from").forGetter(NotificationPositionChangedPayload::from),
+        Codec.DOUBLE.listOf().fieldOf("to").forGetter(NotificationPositionChangedPayload::to)
+    ).apply(i, NotificationPositionChangedPayload::new));
 
-    /** MSMP schema for {@link PositionChangedPayload}, used for protocol discovery. */
-    public static final Schema<PositionChangedPayload> SCHEMA = Schema.record(CODEC)
+    /** MSMP schema for {@link NotificationPositionChangedPayload}, used for protocol discovery. */
+    public static final Schema<NotificationPositionChangedPayload> SCHEMA = Schema.record(CODEC)
         .withField("entity", EntityRef.SCHEMA)
         .withField("from", POSITION_SCHEMA)
         .withField("to", POSITION_SCHEMA);

@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * <p>Checks every {@code intervalTicks} ticks whether a tracked entity has moved
  * at least {@code blockDelta} blocks since its last recorded position.</p>
  */
-public class PositionChanged {
+public class NotificationPositionChanged {
 
     public static final String TRACKER_KEY = "entity:notification/position/changed";
 
@@ -36,12 +36,12 @@ public class PositionChanged {
      */
     public static final Map<UUID, double[]> LAST_POSITIONS = new ConcurrentHashMap<>();
 
-    private PositionChanged() {}
+    private NotificationPositionChanged() {}
 
     public static void register(MSMPNamespace namespace, Supplier<MSMPServer> msmpServer) {
-        MSMPNotification<PositionChangedPayload> notification = namespace.notification(
+        MSMPNotification<NotificationPositionChangedPayload> notification = namespace.notification(
             "position/changed",
-            PositionChangedPayload.SCHEMA,
+            NotificationPositionChangedPayload.SCHEMA,
             "Fired when a tracked entity moves at least blockDelta blocks (checked every intervalTicks ticks)"
         );
 
@@ -84,7 +84,7 @@ public class PositionChanged {
 
                 if (dx * dx + dy * dy + dz * dz < blockDelta * blockDelta) continue;
 
-                msmp.send(notification, new PositionChangedPayload(
+                msmp.send(notification, new NotificationPositionChangedPayload(
                     EntityResolver.toEntityRef(entity),
                     List.of(last[0], last[1], last[2]),
                     List.of(cx, cy, cz)

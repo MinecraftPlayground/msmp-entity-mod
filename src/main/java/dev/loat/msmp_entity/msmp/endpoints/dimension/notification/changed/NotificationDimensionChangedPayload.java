@@ -22,21 +22,21 @@ import net.minecraft.server.jsonrpc.api.Schema;
  * @param from The dimension the entity came from
  * @param to The dimension the entity entered
  */
-public record DimensionChangedPayload(EntityRef entity, String from, String to) {
+public record NotificationDimensionChangedPayload(EntityRef entity, String from, String to) {
 
     /**
-     * Codec for serializing and deserializing {@link DimensionChangedPayload} instances.
+     * Codec for serializing and deserializing {@link NotificationDimensionChangedPayload} instances.
      */
-    public static final Codec<DimensionChangedPayload> CODEC = RecordCodecBuilder.create(i -> i.group(
-        EntityRef.CODEC.fieldOf("entity").forGetter(DimensionChangedPayload::entity),
-        Codec.STRING.fieldOf("from").forGetter(DimensionChangedPayload::from),
-        Codec.STRING.fieldOf("to").forGetter(DimensionChangedPayload::to)
-    ).apply(i, DimensionChangedPayload::new));
+    public static final Codec<NotificationDimensionChangedPayload> CODEC = RecordCodecBuilder.create(i -> i.group(
+        EntityRef.CODEC.fieldOf("entity").forGetter(NotificationDimensionChangedPayload::entity),
+        Codec.STRING.fieldOf("from").forGetter(NotificationDimensionChangedPayload::from),
+        Codec.STRING.fieldOf("to").forGetter(NotificationDimensionChangedPayload::to)
+    ).apply(i, NotificationDimensionChangedPayload::new));
 
     /**
-     * MSMP schema for {@link DimensionChangedPayload}, used for protocol discovery.
+     * MSMP schema for {@link NotificationDimensionChangedPayload}, used for protocol discovery.
      */
-    public static final Schema<DimensionChangedPayload> SCHEMA = Schema.record(CODEC)
+    public static final Schema<NotificationDimensionChangedPayload> SCHEMA = Schema.record(CODEC)
         .withField("entity", EntityRef.SCHEMA)
         .withField("from", Schema.STRING_SCHEMA)
         .withField("to", Schema.STRING_SCHEMA);

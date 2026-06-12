@@ -5,7 +5,7 @@ import dev.loat.msmp_entity.logging.RPCConnectionLogger;
 import dev.loat.msmp_entity.msmp.components.EntityRef;
 import dev.loat.msmp_entity.msmp.components.EntityRequest;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
-import dev.loat.msmp_entity.msmp.endpoints.position.notification.changed.PositionChanged;
+import dev.loat.msmp_entity.msmp.endpoints.position.notification.changed.NotificationPositionChanged;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTracker;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerRequest;
 import dev.loat.msmp_entity.msmp.entity_tracker.EntityTrackerResponse;
@@ -39,14 +39,14 @@ public class PositionChangedAdd {
                     return new EntityTrackerResponse(List.of());
                 }
 
-                EntityTracker entityTracker = EntityTracker.get(PositionChanged.TRACKER_KEY);
+                EntityTracker entityTracker = EntityTracker.get(NotificationPositionChanged.TRACKER_KEY);
                 Set<UUID> uuids = new HashSet<>();
                 List<EntityRef> resolved = new ArrayList<>();
 
                 for (EntityRequest entry : params.entities()) {
                     try {
                         Entity entity = EntityResolver.resolveEntity(server, entry);
-                        PositionChanged.LAST_POSITIONS.remove(entity.getUUID());
+                        NotificationPositionChanged.LAST_POSITIONS.remove(entity.getUUID());
                         uuids.add(entity.getUUID());
                         resolved.add(EntityResolver.toEntityRef(entity));
                     } catch (IllegalArgumentException e) {

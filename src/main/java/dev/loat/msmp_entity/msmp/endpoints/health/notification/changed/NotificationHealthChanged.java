@@ -12,17 +12,17 @@ import java.util.function.Supplier;
  * <p>Uses a Mixin on {@code LivingEntity#setHealth(float)} to fire immediately
  * on every health change of a tracked entity.</p>
  */
-public class HealthChanged {
+public class NotificationHealthChanged {
 
     public static final String TRACKER_KEY = "entity:notification/health/changed";
 
-    private HealthChanged() {}
+    private NotificationHealthChanged() {}
 
     public static void register(MSMPNamespace namespace, Supplier<MSMPServer> msmpServer) {
-        HealthChangedDispatcher.init(
+        NotificationHealthChangedDispatcher.init(
             namespace.notification(
                 "health/changed",
-                HealthChangedPayload.SCHEMA,
+                NotificationHealthChangedPayload.SCHEMA,
                 "Fired when a tracked LivingEntity's health changes"
             ),
             msmpServer
