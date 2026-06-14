@@ -10,23 +10,24 @@ This mod is designed for tooling, dashboards, automation systems, external monit
 
 The mod currently provides the following MSMP RPC methods. All of these methods are also automatically discoverable through the standard `rpc.discover` MSMP endpoint.
 
-| Method                            | Description                                                             |
-| --------------------------------- | ----------------------------------------------------------------------- |
-| `entity:dimension`                | Returns the dimension/world of an entity.                               |
-| `entity:dimension/set`            | Changes the dimension of an entity.                                     |
-| `entity:dimension/changed/add`    | Add entities to dimension change notifications.                         |
-| `entity:dimension/changed/remove` | Remove entities from dimension change notifications.                    |
-| `entity:health`                   | Returns the current and maximum health of a LivingEntity.               |
-| `entity:health/set`               | Sets the health value of an entity.                                     |
-| `entity:items`                    | Returns the inventory contents of a player or inventory-holding entity. |
-| `entity:items/set`                | Modifies or replaces inventory contents.                                |
-| `entity:position`                 | Returns the current position of an entity.                              |
-| `entity:position/set`             | Teleports or changes the position of an entity.                         |
-| `entity:rotation`                 | Returns the current entity rotation.                                    |
-| `entity:rotation/set`             | Updates the entity rotation.                                            |
-| `entity:saturation`               | Returns the food level and saturation of a player.                      |
-| `entity:saturation/set`           | Sets the food level and saturation of a player.                         |
-| `entity:uuid`                     | Resolves or returns UUID information for players.                       |
+| Method                            | Description                                                                                   |
+| --------------------------------- | --------------------------------------------------------------------------------------------- |
+| `entity:dimension`                | Returns the current dimension of any loaded entity by UUID, or a player by name               |
+| `entity:dimension/set`            | Transfers any loaded entity to the given dimension, keeping its current position and rotation |
+| `entity:dimension/changed`        | Returns a list of all tracked entities for the dimension changed event                        |
+| `entity:dimension/changed/add`    | Add entities to the dimension change notification tracker                                     |
+| `entity:dimension/changed/remove` | Remove entities from the dimension change notification tracker                                |
+| `entity:health`                   | Returns the current and maximum health of any LivingEntity                                    |
+| `entity:health/set`               | Partially updates the health and/or maximum health of any LivingEntity                        |
+| `entity:items`                    | Returns all occupied inventory slots of an online player in Vanilla NBT format                |
+| `entity:items/set`                | Partially updates an online player's inventory using a diff approach                          |
+| `entity:position`                 | Returns the current position of any loaded entity                                             |
+| `entity:position/set`             | Teleports any loaded entity to the given position within its current dimension                |
+| `entity:rotation`                 | Returns the current rotation of any loaded entity by UUID, or a player by name                |
+| `entity:rotation/set`             | Sets the rotation of any loaded entity, preserving its position and dimension                 |
+| `entity:saturation`               | Returns the current food level and saturation of an online player                             |
+| `entity:saturation/set`           | Partially updates the food level and/or saturation of an online player                        |
+| `entity:uuid`                     | Returns the UUID of an online player by name                                                  |
 
 ## RPC Notifications
 
@@ -34,7 +35,7 @@ The mod also provides the following MSMP RPC notifications that clients can subs
 
 | Method                                  | Description                                   |
 | --------------------------------------- | --------------------------------------------- |
-| `entity:notification/dimension/changed` | Notifies about dimension changes of entities. |
+| `entity:notification/dimension/changed` | Fires when a tracked entity changes dimension |
 
 ## Installation
 
