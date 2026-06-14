@@ -4,6 +4,7 @@ import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp.MSMPServer;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.Dimension;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.DimensionSet;
+import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChanged;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChangedAdd;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChangedRemove;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.notification.changed.NotificationDimensionChanged;
@@ -45,24 +46,25 @@ public class Endpoints {
     public static void register(MSMPNamespace namespace, Supplier<MSMPServer> msmpServer) {
         Dimension.register(namespace);
         DimensionSet.register(namespace);
-        NotificationDimensionChanged.register(namespace, msmpServer);
+        DimensionChanged.register(namespace);
         DimensionChangedAdd.register(namespace);
         DimensionChangedRemove.register(namespace);
+        NotificationDimensionChanged.register(namespace, msmpServer);
 
         Health.register(namespace);
         HealthSet.register(namespace);
-        NotificationHealthChanged.register(namespace, msmpServer);
         HealthChangedAdd.register(namespace);
         HealthChangedRemove.register(namespace);
+        NotificationHealthChanged.register(namespace, msmpServer);
 
         Items.register(namespace);
         ItemsSet.register(namespace);
 
         Position.register(namespace);
         PositionSet.register(namespace);
-        NotificationPositionChanged.register(namespace, msmpServer);
         PositionChangedAdd.register(namespace);
         PositionChangedRemove.register(namespace);
+        NotificationPositionChanged.register(namespace, msmpServer);
 
         Rotation.register(namespace);
         RotationSet.register(namespace);
