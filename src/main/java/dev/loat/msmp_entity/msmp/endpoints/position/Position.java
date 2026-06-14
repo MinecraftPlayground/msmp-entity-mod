@@ -47,12 +47,12 @@ public class Position {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "position",
-            EntityRequest.SCHEMA,
-            PositionResponse.SCHEMA,
-            "Returns the current position of any loaded entity",
-            (server, params, client) -> {
+        
+        namespace.method("position")
+            .description("Returns the current position of any loaded entity")
+            .requestSchema(EntityRequest.SCHEMA)
+            .responseSchema(PositionResponse.SCHEMA)
+            .register((server, client, params) -> {
                 try {
                     Entity entity = EntityResolver.resolveEntity(server, params);
                     return new PositionResponse(
@@ -63,7 +63,6 @@ public class Position {
                     Logger.warning("entity:position - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

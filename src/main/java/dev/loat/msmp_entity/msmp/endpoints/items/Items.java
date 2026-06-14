@@ -67,12 +67,12 @@ public class Items {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "items",
-            EntityRequest.SCHEMA,
-            ItemsResponse.SCHEMA,
-            "Returns all occupied inventory slots of an online player in Vanilla NBT format",
-            (server, params, client) -> {
+        
+        namespace.method("items")
+            .description("Returns all occupied inventory slots of an online player in Vanilla NBT format")
+            .requestSchema(EntityRequest.SCHEMA)
+            .responseSchema(ItemsResponse.SCHEMA)
+            .register((server, client, params) -> {
                 try {
                     Player player = EntityResolver.resolvePlayer(server, params);
                     Inventory items = player.getInventory();
@@ -117,7 +117,6 @@ public class Items {
                     Logger.warning("entity:items - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

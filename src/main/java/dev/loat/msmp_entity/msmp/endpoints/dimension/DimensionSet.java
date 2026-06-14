@@ -46,11 +46,12 @@ public class DimensionSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("dimension/set",
-            DimensionSetRequest.SCHEMA,
-            DimensionResponse.SCHEMA,
-            "Transfers any loaded entity to the given dimension, keeping its current position and rotation",
-            (server, params, client) -> {
+        
+        namespace.method("dimension/set")
+            .description("Transfers any loaded entity to the given dimension, keeping its current position and rotation")
+            .requestSchema(DimensionSetRequest.SCHEMA)
+            .responseSchema(DimensionResponse.SCHEMA)
+            .register((server, client, params) -> {
                 try {
                     Entity entity = EntityResolver.resolveEntity(server, params);
 
@@ -82,8 +83,7 @@ public class DimensionSet {
                     RPCConnectionLogger.warning(client.connectionId(), "entity:dimension/set - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }
 

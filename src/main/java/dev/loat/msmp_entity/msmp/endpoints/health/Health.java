@@ -47,12 +47,12 @@ public class Health {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "health",
-            EntityRequest.SCHEMA,
-            HealthResponse.SCHEMA,
-            "Returns the current and maximum health of any LivingEntity",
-            (server, params, client) -> {
+        
+        namespace.method("health")
+            .description("Returns the current and maximum health of any LivingEntity")
+            .requestSchema(EntityRequest.SCHEMA)
+            .responseSchema(HealthResponse.SCHEMA)
+            .register((server, client, params) -> {
                 try {
                     LivingEntity living = EntityResolver.resolveLivingEntity(server, params);
                     return new HealthResponse(
@@ -64,7 +64,6 @@ public class Health {
                     Logger.warning("entity:health - " + e.getMessage());
                     return null;
                 }
-            }
-        );
+            });
     }
 }

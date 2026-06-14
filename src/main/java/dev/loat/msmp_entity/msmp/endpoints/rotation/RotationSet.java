@@ -46,12 +46,12 @@ public class RotationSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "rotation/set",
-            RotationSetRequest.SCHEMA,
-            RotationResponse.SCHEMA,
-            "Sets the rotation of any loaded entity, preserving its position and dimension",
-            (server, params, client) -> {
+
+        namespace.method("rotation/set")
+            .description("Sets the rotation of any loaded entity, preserving its position and dimension")
+            .requestSchema(RotationSetRequest.SCHEMA)
+            .responseSchema(RotationResponse.SCHEMA)
+            .register((server, client, params) -> {
                 List<Double> rot = params.rotation();
                 if (rot.size() != 2) {
                     throw new IllegalArgumentException(
@@ -81,7 +81,6 @@ public class RotationSet {
                     Logger.warning("entity:rotation/set - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

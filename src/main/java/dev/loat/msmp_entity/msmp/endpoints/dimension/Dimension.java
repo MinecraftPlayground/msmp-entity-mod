@@ -44,12 +44,12 @@ public class Dimension {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "dimension",
-            EntityRequest.SCHEMA,
-            DimensionResponse.SCHEMA,
-            "Returns the current dimension of any loaded entity by UUID, or a player by name",
-            (server, params, client) -> {
+        
+        namespace.method("dimension")
+            .description("Returns the current dimension of any loaded entity by UUID, or a player by name")
+            .requestSchema(EntityRequest.SCHEMA)
+            .responseSchema(DimensionResponse.SCHEMA)
+            .register((server, client, params) -> {
                 try {
                     Entity entity = EntityResolver.resolveEntity(server, params);
                     return new DimensionResponse(
@@ -60,7 +60,6 @@ public class Dimension {
                     RPCConnectionLogger.warning(client.connectionId(), "entity:dimension - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

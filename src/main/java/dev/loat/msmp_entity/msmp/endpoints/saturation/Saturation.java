@@ -46,12 +46,12 @@ public class Saturation {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "saturation",
-            EntityRequest.SCHEMA,
-            SaturationResponse.SCHEMA,
-            "Returns the current food level and saturation of an online player",
-            (server, params, client) -> {
+
+        namespace.method("saturation")
+            .description("Returns the current food level and saturation of an online player")
+            .requestSchema(EntityRequest.SCHEMA)
+            .responseSchema(SaturationResponse.SCHEMA)
+            .register((server, client, params) -> {
                 try {
                     Player player = EntityResolver.resolvePlayer(server, params);
                     return new SaturationResponse(
@@ -63,7 +63,6 @@ public class Saturation {
                     Logger.warning("entity:saturation - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

@@ -16,7 +16,6 @@ import dev.loat.msmp_entity.msmp.endpoints.items.Items;
 import dev.loat.msmp_entity.msmp.endpoints.items.ItemsSet;
 import dev.loat.msmp_entity.msmp.endpoints.position.Position;
 import dev.loat.msmp_entity.msmp.endpoints.position.PositionSet;
-// import dev.loat.msmp_entity.msmp.endpoints.position.changed.PositionChanged;
 import dev.loat.msmp_entity.msmp.endpoints.position.changed.PositionChangedAdd;
 import dev.loat.msmp_entity.msmp.endpoints.position.changed.PositionChangedRemove;
 import dev.loat.msmp_entity.msmp.endpoints.position.notification.changed.NotificationPositionChanged;
@@ -61,7 +60,6 @@ public class Endpoints {
 
         Position.register(namespace);
         PositionSet.register(namespace);
-        // PositionChanged.register(namespace);
         NotificationPositionChanged.register(namespace, msmpServer);
         PositionChangedAdd.register(namespace);
         PositionChangedRemove.register(namespace);

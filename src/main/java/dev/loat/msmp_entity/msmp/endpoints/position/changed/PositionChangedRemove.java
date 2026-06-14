@@ -29,12 +29,12 @@ public class PositionChangedRemove {
     private PositionChangedRemove() {}
 
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "position/changed/remove",
-            EntityTrackerRequest.SCHEMA,
-            EntityTrackerResponse.SCHEMA,
-            "Remove entities from the position change notification tracker",
-            (server, params, client) -> {
+        
+        namespace.method("position/changed/remove")
+            .description("Remove entities from the position change notification tracker")    
+            .requestSchema(EntityTrackerRequest.SCHEMA)
+            .responseSchema(EntityTrackerResponse.SCHEMA)
+            .register((server, client, params) -> {
                 if (params.entities().isEmpty()) {
                     return new EntityTrackerResponse(List.of());
                 }

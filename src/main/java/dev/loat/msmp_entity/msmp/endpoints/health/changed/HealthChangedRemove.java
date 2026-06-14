@@ -28,12 +28,12 @@ public class HealthChangedRemove {
     private HealthChangedRemove() {}
 
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "health/changed/remove",
-            EntityTrackerRequest.SCHEMA,
-            EntityTrackerResponse.SCHEMA,
-            "Remove entities from the health change notification tracker",
-            (server, params, client) -> {
+
+        namespace.method("health/changed/remove")
+            .description("Remove entities from the health change notification tracker")
+            .requestSchema(EntityTrackerRequest.SCHEMA)
+            .responseSchema(EntityTrackerResponse.SCHEMA)
+            .register((server, client, params) -> {
                 if (params.entities().isEmpty()) {
                     return new EntityTrackerResponse(List.of());
                 }
@@ -57,7 +57,6 @@ public class HealthChangedRemove {
                 RPCConnectionLogger.info(client.connectionId(),
                     "entity:health/changed/remove - removed %s".formatted(uuids));
                 return new EntityTrackerResponse(resolved);
-            }
-        );
+            });
     }
 }

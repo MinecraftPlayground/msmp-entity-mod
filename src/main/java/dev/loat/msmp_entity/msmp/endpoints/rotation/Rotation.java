@@ -47,12 +47,12 @@ public class Rotation {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "rotation",
-            EntityRequest.SCHEMA,
-            RotationResponse.SCHEMA,
-            "Returns the current rotation of any loaded entity by UUID, or a player by name",
-            (server, params, client) -> {
+        
+        namespace.method("rotation")
+            .description("Returns the current rotation of any loaded entity by UUID, or a player by name")
+            .requestSchema(EntityRequest.SCHEMA)
+            .responseSchema(RotationResponse.SCHEMA)
+            .register((server, client, params) -> {
                 try {
                     Entity entity = EntityResolver.resolveEntity(server, params);
                     return new RotationResponse(
@@ -63,7 +63,6 @@ public class Rotation {
                     Logger.warning("entity:rotation - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

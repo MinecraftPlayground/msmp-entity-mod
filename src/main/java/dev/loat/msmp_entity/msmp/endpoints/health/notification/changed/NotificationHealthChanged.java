@@ -20,11 +20,10 @@ public class NotificationHealthChanged {
 
     public static void register(MSMPNamespace namespace, Supplier<MSMPServer> msmpServer) {
         NotificationHealthChangedDispatcher.init(
-            namespace.notification(
-                "health/changed",
-                NotificationHealthChangedPayload.SCHEMA,
-                "Fired when a tracked LivingEntity's health changes"
-            ),
+            namespace.notification("health/changed")
+                .description("Fired when a tracked LivingEntity's health changes")
+                .responseSchema(NotificationHealthChangedPayload.SCHEMA)
+                .register(),
             msmpServer
         );
     }

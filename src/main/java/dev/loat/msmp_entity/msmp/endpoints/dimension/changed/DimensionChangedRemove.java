@@ -28,12 +28,12 @@ public class DimensionChangedRemove {
     private DimensionChangedRemove() {}
 
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "dimension/changed/remove",
-            EntityTrackerRequest.SCHEMA,
-            EntityTrackerResponse.SCHEMA,
-            "Remove entities from the dimension change notification tracker",
-            (server, params, client) -> {
+        
+        namespace.method("dimension/changed/remove")
+            .description("Remove entities from the dimension change notification tracker")
+            .requestSchema(EntityTrackerRequest.SCHEMA)
+            .responseSchema(EntityTrackerResponse.SCHEMA)
+            .register((server, client, params) -> {
                 if (params.entities().isEmpty()) {
                     return new EntityTrackerResponse(List.of());
                 }
@@ -57,7 +57,6 @@ public class DimensionChangedRemove {
                 RPCConnectionLogger.info(client.connectionId(),
                     "entity:dimension/changed/remove - removed %s".formatted(uuids));
                 return new EntityTrackerResponse(resolved);
-            }
-        );
+            });
     }
 }

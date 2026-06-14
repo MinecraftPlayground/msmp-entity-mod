@@ -64,12 +64,12 @@ public class ItemsSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "items/set",
-            ItemsSetRequest.SCHEMA,
-            ItemsResponse.SCHEMA,
-            "Partially updates an online player's inventory using a diff approach",
-            (server, params, client) -> {
+        
+        namespace.method("items/set")
+            .description("Partially updates an online player's inventory using a diff approach")
+            .requestSchema(ItemsSetRequest.SCHEMA)
+            .responseSchema(ItemsResponse.SCHEMA)
+            .register((server, client, params) -> {
                 ItemsSetRequest req = params;
                 try {
                     Player player = EntityResolver.resolvePlayer(server, req);
@@ -191,7 +191,6 @@ public class ItemsSet {
                     Logger.warning("entity:items/set - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

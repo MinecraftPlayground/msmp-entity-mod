@@ -29,12 +29,12 @@ public class PositionChangedAdd {
     private PositionChangedAdd() {}
 
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "position/changed/add",
-            EntityTrackerRequest.SCHEMA,
-            EntityTrackerResponse.SCHEMA,
-            "Add entities to the position change notification tracker",
-            (server, params, client) -> {
+        
+        namespace.method("position/changed/add")
+            .description("Add entities to the position change notification tracker")
+            .requestSchema(EntityTrackerRequest.SCHEMA)
+            .responseSchema(EntityTrackerResponse.SCHEMA)
+            .register((server, client, params) -> {
                 if (params.entities().isEmpty()) {
                     return new EntityTrackerResponse(List.of());
                 }
@@ -59,7 +59,6 @@ public class PositionChangedAdd {
                 RPCConnectionLogger.info(client.connectionId(),
                     "entity:position/changed/add - added %s".formatted(uuids));
                 return new EntityTrackerResponse(resolved);
-            }
-        );
+            });
     }
 }

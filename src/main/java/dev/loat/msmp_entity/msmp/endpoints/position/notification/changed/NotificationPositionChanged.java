@@ -39,11 +39,11 @@ public class NotificationPositionChanged {
     private NotificationPositionChanged() {}
 
     public static void register(MSMPNamespace namespace, Supplier<MSMPServer> msmpServer) {
-        MSMPNotification<NotificationPositionChangedPayload> notification = namespace.notification(
-            "position/changed",
-            NotificationPositionChangedPayload.SCHEMA,
-            "Fired when a tracked entity moves at least blockDelta blocks (checked every intervalTicks ticks)"
-        );
+        
+        MSMPNotification<NotificationPositionChangedPayload> notification = namespace.notification("position/changed")
+            .description("Fired when a tracked entity moves at least blockDelta blocks (checked every intervalTicks ticks)")
+            .responseSchema(NotificationPositionChangedPayload.SCHEMA)
+            .register();
 
         EntityTracker tracker = EntityTracker.get(TRACKER_KEY);
         int[] tickCounter = {0};

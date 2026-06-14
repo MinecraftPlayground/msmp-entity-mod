@@ -40,11 +40,11 @@ public class UUID {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method("uuid",
-            UUIDRequest.SCHEMA,
-            PlayerRef.SCHEMA,
-            "Returns the UUID of an online player by name",
-            (server, params, client) -> {
+        namespace.method("uuid")
+            .description("Returns the UUID of an online player by name")
+            .requestSchema(UUIDRequest.SCHEMA)
+            .responseSchema(PlayerRef.SCHEMA)
+            .register((server, client, params) -> {
                 ServerPlayer player = server.getPlayerList().getPlayerByName(params.name());
                 if (player == null) {
                     Logger.warning("entity:uuid - player not found: " + params.name());
@@ -54,7 +54,6 @@ public class UUID {
                     player.getUUID().toString(),
                     player.getName().getString()
                 );
-            }
-        );
+            });
     }
 }

@@ -26,11 +26,10 @@ public class NotificationDimensionChanged {
 
     public static void register(MSMPNamespace namespace, Supplier<MSMPServer> msmpServer) {
         MSMPNotification<NotificationDimensionChangedPayload> notification =
-            namespace.notification(
-                "dimension/changed",
-                NotificationDimensionChangedPayload.SCHEMA,
-                "Fires when a tracked entity changes dimension"
-            );
+            namespace.notification("dimension/changed")
+                .description("Fires when a tracked entity changes dimension")
+                .responseSchema(NotificationDimensionChangedPayload.SCHEMA)
+                .register();
 
         ServerEntityLevelChangeEvents.AFTER_ENTITY_CHANGE_LEVEL.register(
             (originalEntity, newEntity, origin, destination) ->

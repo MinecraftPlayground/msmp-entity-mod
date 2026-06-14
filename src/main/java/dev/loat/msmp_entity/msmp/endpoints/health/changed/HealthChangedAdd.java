@@ -30,12 +30,12 @@ public class HealthChangedAdd {
     private HealthChangedAdd() {}
 
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "health/changed/add",
-            EntityTrackerRequest.SCHEMA,
-            EntityTrackerResponse.SCHEMA,
-            "Add LivingEntities to the health change notification tracker",
-            (server, params, client) -> {
+        
+        namespace.method("health/changed/add")
+            .description("Add LivingEntities to the health change notification tracker")
+            .requestSchema(EntityTrackerRequest.SCHEMA)
+            .responseSchema(EntityTrackerResponse.SCHEMA)
+            .register((server, client, params) -> {
                 if (params.entities().isEmpty()) {
                     return new EntityTrackerResponse(List.of());
                 }
@@ -66,7 +66,6 @@ public class HealthChangedAdd {
                 RPCConnectionLogger.info(client.connectionId(),
                     "entity:health/changed/add - added %s".formatted(uuids));
                 return new EntityTrackerResponse(resolved);
-            }
-        );
+            });
     }
 }

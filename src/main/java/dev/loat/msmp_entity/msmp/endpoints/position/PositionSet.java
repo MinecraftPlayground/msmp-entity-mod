@@ -45,12 +45,12 @@ public class PositionSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "position/set",
-            PositionSetRequest.SCHEMA,
-            PositionResponse.SCHEMA,
-            "Teleports any loaded entity to the given position within its current dimension",
-            (server, params, client) -> {
+        
+        namespace.method("position/set")
+            .description("Teleports any loaded entity to the given position within its current dimension")
+            .requestSchema(PositionSetRequest.SCHEMA)
+            .responseSchema(PositionResponse.SCHEMA)
+            .register((server, client, params) -> {
                 List<Double> pos = params.position();
                 if (pos.size() != 3) {
                     throw new IllegalArgumentException(
@@ -77,7 +77,6 @@ public class PositionSet {
                     Logger.warning("entity:position/set - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

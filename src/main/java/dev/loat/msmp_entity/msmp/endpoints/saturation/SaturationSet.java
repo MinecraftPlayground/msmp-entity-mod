@@ -64,12 +64,12 @@ public class SaturationSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "saturation/set",
-            SaturationSetRequest.SCHEMA,
-            SaturationResponse.SCHEMA,
-            "Partially updates the food level and/or saturation of an online player",
-            (server, params, client) -> {
+        
+        namespace.method("saturation/set")
+            .requestSchema(SaturationSetRequest.SCHEMA)
+            .responseSchema(SaturationResponse.SCHEMA)
+            .description("Partially updates the food level and/or saturation of an online player")
+            .register((server, client, params) -> {
                 if (params.food().isEmpty() && params.saturation().isEmpty()) {
                     Logger.warning("entity:saturation/set - neither 'food' nor 'saturation' provided");
                     throw new IllegalArgumentException("Either 'food' or 'saturation' must be provided");
@@ -96,7 +96,6 @@ public class SaturationSet {
                     Logger.warning("entity:saturation/set - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

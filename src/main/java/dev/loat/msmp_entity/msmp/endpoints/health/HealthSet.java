@@ -64,12 +64,12 @@ public class HealthSet {
      * @param namespace The namespace to register this method under
      */
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "health/set",
-            HealthSetRequest.SCHEMA,
-            HealthResponse.SCHEMA,
-            "Partially updates the health and/or maximum health of any LivingEntity",
-            (server, params, client) -> {
+        
+        namespace.method("health/set")
+            .description("Partially updates the health and/or maximum health of any LivingEntity")
+            .requestSchema(HealthSetRequest.SCHEMA)
+            .responseSchema(HealthResponse.SCHEMA)
+            .register((server, client, params) -> {
                 if (params.health().isEmpty() && params.maxHealth().isEmpty()) {
                     Logger.warning("entity:health/set - neither 'health' nor 'max_health' provided");
                     throw new IllegalArgumentException("Either 'health' or 'max_health' must be provided");
@@ -101,7 +101,6 @@ public class HealthSet {
                     Logger.warning("entity:health/set - " + e.getMessage());
                     throw e;
                 }
-            }
-        );
+            });
     }
 }

@@ -28,12 +28,12 @@ public class DimensionChangedAdd {
     private DimensionChangedAdd() {}
 
     public static void register(MSMPNamespace namespace) {
-        namespace.method(
-            "dimension/changed/add",
-            EntityTrackerRequest.SCHEMA,
-            EntityTrackerResponse.SCHEMA,
-            "Add entities to the dimension change notification tracker",
-            (server, params, client) -> {
+        
+        namespace.method("dimension/changed/add")
+            .description("Add entities to the dimension change notification tracker")
+            .requestSchema(EntityTrackerRequest.SCHEMA)
+            .responseSchema(EntityTrackerResponse.SCHEMA)
+            .register((server, client, params) -> {
                 if (params.entities().isEmpty()) {
                     return new EntityTrackerResponse(List.of());
                 }
@@ -57,7 +57,6 @@ public class DimensionChangedAdd {
                 RPCConnectionLogger.info(client.connectionId(),
                     "entity:dimension/changed/add - added %s".formatted(uuids));
                 return new EntityTrackerResponse(resolved);
-            }
-        );
+            });
     }
 }
