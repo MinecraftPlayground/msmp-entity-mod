@@ -10,6 +10,7 @@ import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChangedRem
 import dev.loat.msmp_entity.msmp.endpoints.dimension.notification.changed.NotificationDimensionChanged;
 import dev.loat.msmp_entity.msmp.endpoints.health.Health;
 import dev.loat.msmp_entity.msmp.endpoints.health.HealthSet;
+import dev.loat.msmp_entity.msmp.endpoints.health.changed.HealthChanged;
 import dev.loat.msmp_entity.msmp.endpoints.health.changed.HealthChangedAdd;
 import dev.loat.msmp_entity.msmp.endpoints.health.changed.HealthChangedRemove;
 import dev.loat.msmp_entity.msmp.endpoints.health.notification.changed.NotificationHealthChanged;
@@ -17,6 +18,7 @@ import dev.loat.msmp_entity.msmp.endpoints.items.Items;
 import dev.loat.msmp_entity.msmp.endpoints.items.ItemsSet;
 import dev.loat.msmp_entity.msmp.endpoints.position.Position;
 import dev.loat.msmp_entity.msmp.endpoints.position.PositionSet;
+import dev.loat.msmp_entity.msmp.endpoints.position.changed.PositionChanged;
 import dev.loat.msmp_entity.msmp.endpoints.position.changed.PositionChangedAdd;
 import dev.loat.msmp_entity.msmp.endpoints.position.changed.PositionChangedRemove;
 import dev.loat.msmp_entity.msmp.endpoints.position.notification.changed.NotificationPositionChanged;
@@ -53,6 +55,7 @@ public class Endpoints {
 
         Health.register(namespace);
         HealthSet.register(namespace);
+        HealthChanged.register(namespace);
         HealthChangedAdd.register(namespace);
         HealthChangedRemove.register(namespace);
         NotificationHealthChanged.register(namespace, msmpServer);
@@ -62,6 +65,7 @@ public class Endpoints {
 
         Position.register(namespace);
         PositionSet.register(namespace);
+        PositionChanged.register(namespace);
         PositionChangedAdd.register(namespace);
         PositionChangedRemove.register(namespace);
         NotificationPositionChanged.register(namespace, msmpServer);
