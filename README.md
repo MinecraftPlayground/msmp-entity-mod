@@ -16,6 +16,7 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 | `entity:dimension/set`            | Transfers any loaded entity to the given dimension, keeping its current position and rotation |
 | `entity:dimension/changed`        | Returns a list of all tracked entities for the dimension changed event                        |
 | `entity:dimension/changed/add`    | Add entities to the dimension change notification tracker                                     |
+| `entity:dimension/changed/clear`  | Clear all entities for the dimension changed event                                            |
 | `entity:dimension/changed/remove` | Remove entities from the dimension change notification tracker                                |
 | `entity:health`                   | Returns the current and maximum health of any LivingEntity                                    |
 | `entity:health/set`               | Partially updates the health and/or maximum health of any LivingEntity                        |

@@ -6,14 +6,6 @@ plugins {
 version = project.mod_version
 group = project.maven_group
 
-loom {
-    mods {
-        "msmp-entity" {
-            sourceSet sourceSets.main
-        }
-    }
-}
-
 repositories {
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
@@ -31,10 +23,8 @@ dependencies {
 
     implementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 
-    implementation(include("org.yaml:snakeyaml:2.2"))
-
-    implementation("com.github.MinecraftPlayground:msmp-lib-mod:v2.1.0")
-    implementation("com.github.MinecraftPlayground:config-lib-mod:v1.3.3")
+    implementation(include("com.github.MinecraftPlayground:msmp-lib-mod:v2.1.1"))
+    implementation(include("com.github.MinecraftPlayground:config-lib-mod:v1.3.3"))
 }
 
 processResources {

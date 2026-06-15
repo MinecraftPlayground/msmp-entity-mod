@@ -6,6 +6,7 @@ import dev.loat.msmp_entity.msmp.endpoints.dimension.Dimension;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.DimensionSet;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChanged;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChangedAdd;
+import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChangedClear;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.changed.DimensionChangedRemove;
 import dev.loat.msmp_entity.msmp.endpoints.dimension.notification.changed.NotificationDimensionChanged;
 import dev.loat.msmp_entity.msmp.endpoints.health.Health;
@@ -50,6 +51,7 @@ public class Endpoints {
         DimensionSet.register(namespace);
         DimensionChanged.register(namespace);
         DimensionChangedAdd.register(namespace);
+        DimensionChangedClear.register(namespace);
         DimensionChangedRemove.register(namespace);
         NotificationDimensionChanged.register(namespace, msmpServer);
 

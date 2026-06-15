@@ -54,6 +54,13 @@ public final class EntityTracker {
     }
 
     /**
+     * Removes all UUIDs from the tracked set.
+     */
+    public void removeAll() {
+        tracked.clear();
+    }
+
+    /**
      * Returns {@code true} if the given UUID is currently being tracked.
      *
      * @param entityId The UUID to check
