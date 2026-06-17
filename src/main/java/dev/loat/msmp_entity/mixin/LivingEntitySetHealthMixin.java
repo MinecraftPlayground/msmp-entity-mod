@@ -1,13 +1,13 @@
 package dev.loat.msmp_entity.mixin;
 
-import dev.loat.msmp_entity.msmp.endpoints.health.notification.changed.NotificationHealthChangedDispatcher;
-
 import net.minecraft.world.entity.LivingEntity;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import dev.loat.msmp_entity.mixin_registry.LivingEntitySetHealthMixinRegistry;
 
 
 /**
@@ -25,6 +25,6 @@ public class LivingEntitySetHealthMixin {
     @Inject(method = "setHealth", at = @At("HEAD"))
     private void onSetHealth(float health, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
-        NotificationHealthChangedDispatcher.dispatch(self, self.getHealth(), health);
+        LivingEntitySetHealthMixinRegistry.invokeCallbacks(self, self.getHealth(), health);
     }
 }

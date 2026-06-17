@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "msmp-data",
+  "id": "msmp-entity",
   "version": "${version}",
   "name": "MSMP Entity",
   "description": "Extends the Minecraft Server Management Protocol (MSMP) by providing additional functions for getting and setting entity data",
