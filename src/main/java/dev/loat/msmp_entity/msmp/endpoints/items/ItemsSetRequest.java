@@ -40,8 +40,8 @@ import java.util.Optional;
 public record ItemsSetRequest(
     Optional<String> id,
     Optional<String> name,
-    JsonElement inventory,
-    JsonElement equipment
+    Optional<JsonElement> inventory,
+    Optional<JsonElement> equipment
 ) implements EntityLookup {
 
     /**
@@ -64,8 +64,8 @@ public record ItemsSetRequest(
     public static final Codec<ItemsSetRequest> CODEC = RecordCodecBuilder.create(i -> i.group(
         Codec.STRING.optionalFieldOf("id").forGetter(ItemsSetRequest::id),
         Codec.STRING.optionalFieldOf("name").forGetter(ItemsSetRequest::name),
-        JSON_ELEMENT_CODEC.fieldOf("inventory").forGetter(ItemsSetRequest::inventory),
-        JSON_ELEMENT_CODEC.fieldOf("equipment").forGetter(ItemsSetRequest::equipment)
+        JSON_ELEMENT_CODEC.optionalFieldOf("inventory").forGetter(ItemsSetRequest::inventory),
+        JSON_ELEMENT_CODEC.optionalFieldOf("equipment").forGetter(ItemsSetRequest::equipment)
     ).apply(i, ItemsSetRequest::new));
 
     /**

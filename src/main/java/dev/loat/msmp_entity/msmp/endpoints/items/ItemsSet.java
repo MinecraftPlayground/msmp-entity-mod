@@ -9,6 +9,7 @@ import com.mojang.serialization.JsonOps;
 import dev.loat.msmp.MSMPNamespace;
 import dev.loat.msmp_entity.logging.Logger;
 import dev.loat.msmp_entity.msmp.components.EntityResolver;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -72,47 +73,54 @@ public class ItemsSet {
             .register((server, client, params) -> {
                 ItemsSetRequest req = params;
                 try {
+                    if (req.inventory().isEmpty() && req.equipment().isEmpty()) {
+                        throw new IllegalArgumentException("At least one of 'inventory' or 'equipment' must be provided");
+                    }
+
                     Player player = EntityResolver.resolvePlayer(server, req);
-                    net.minecraft.world.entity.player.Inventory inv = player.getInventory();
+                    Inventory inv = player.getInventory();
                     int containerSize = inv.getContainerSize();
                     var ctx = server.registryAccess().createSerializationContext(JsonOps.INSTANCE);
 
-                    for (JsonElement element : req.inventory().getAsJsonArray()) {
-                        if (!element.isJsonObject()) {
-                            throw new IllegalArgumentException("Each inventory entry must be a JSON object");
+                    if (req.inventory().isPresent()) {
+                        for (JsonElement element : req.inventory().get().getAsJsonArray()) {
+                            if (!element.isJsonObject()) {
+                                throw new IllegalArgumentException("Each inventory entry must be a JSON object");
+                            }
+
+                            JsonObject entry = element.getAsJsonObject().deepCopy();
+
+                            if (!entry.has("Slot")) {
+                                throw new IllegalArgumentException("Each inventory entry must contain a 'Slot' key");
+                            }
+
+                            int slot = entry.get("Slot").getAsInt();
+                            if (slot < 0 || slot >= containerSize) {
+                                throw new IllegalArgumentException(
+                                    "Invalid slot index %d — must be between 0 and %d".formatted(slot, containerSize - 1)
+                                );
+                            }
+
+                            entry.remove("Slot");
+
+                            boolean isEmpty = !entry.has("id")
+                                || entry.get("id").isJsonNull()
+                                || entry.get("id").getAsString().equals("minecraft:air")
+                                || entry.get("count").getAsInt() == 0;
+
+                            ItemStack stack = isEmpty ? ItemStack.EMPTY : ItemStack.CODEC
+                                .decode(ctx, entry)
+                                .getOrThrow(err -> new IllegalArgumentException(
+                                    "Failed to deserialize item in slot %d: %s".formatted(slot, err)
+                                ))
+                                .getFirst();
+
+                            inv.setItem(slot, stack);
                         }
-
-                        JsonObject entry = element.getAsJsonObject().deepCopy();
-
-                        if (!entry.has("Slot")) {
-                            throw new IllegalArgumentException("Each inventory entry must contain a 'Slot' key");
-                        }
-
-                        int slot = entry.get("Slot").getAsInt();
-                        if (slot < 0 || slot >= containerSize) {
-                            throw new IllegalArgumentException(
-                                "Invalid slot index %d — must be between 0 and %d".formatted(slot, containerSize - 1)
-                            );
-                        }
-
-                        entry.remove("Slot");
-
-                        // Clear the slot if no id given or id is minecraft:air
-                        boolean isEmpty = !entry.has("id")
-                            || entry.get("id").getAsString().equals("minecraft:air");
-
-                        ItemStack stack = isEmpty ? ItemStack.EMPTY : ItemStack.CODEC
-                            .decode(ctx, entry)
-                            .getOrThrow(err -> new IllegalArgumentException(
-                                "Failed to deserialize item in slot %d: %s".formatted(slot, err)
-                            ))
-                            .getFirst();
-
-                        inv.setItem(slot, stack);
                     }
 
-                    if (req.equipment().isJsonObject()) {
-                        var equipmentObj = req.equipment().getAsJsonObject();
+                    if (req.equipment().isPresent()) {
+                        var equipmentObj = req.equipment().get().getAsJsonObject();
                         var equipmentSlots = Map.ofEntries(
                             Map.entry("feet", 36),
                             Map.entry("legs", 37),
