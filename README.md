@@ -25,6 +25,9 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 | `entity:health/changed/remove`    | Remove entities from the health change notification tracker                                   |
 | `entity:items`                    | Returns all occupied inventory slots of an online player in Vanilla NBT format                |
 | `entity:items/set`                | Partially updates an online player's inventory using a diff approach                          |
+| `entity:items/changed`            | Returns a list of all tracked entities for the items changed event                            |
+| `entity:items/changed/add`        | Add players to the items change notification tracker                                          |
+| `entity:items/changed/remove`     | Remove entities from the items change notification tracker                                    |
 | `entity:position`                 | Returns the current position of any loaded entity                                             |
 | `entity:position/set`             | Teleports any loaded entity to the given position within its current dimension                |
 | `entity:position/changed`         | Returns a list of all tracked entities for the position changed event                         |
@@ -40,9 +43,12 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 
 The mod also provides the following MSMP RPC notifications that clients can subscribe to:
 
-| Method                                  | Description                                   |
-| --------------------------------------- | --------------------------------------------- |
-| `entity:notification/dimension/changed` | Fires when a tracked entity changes dimension |
+| Method                                   | Description                                                    |
+| ---------------------------------------- | -------------------------------------------------------------- |
+| `entity:notification/dimension/changed`  | Fires when a tracked entity changes dimension                  |
+| `entity:notification/health/changed`     | Fires when a tracked LivingEntity's health changes             |
+| `entity:notification/items/changed`      | Fires when a tracked player's inventory or equipment changes   |
+| `entity:notification/position/changed`   | Fires when a tracked entity moves at least `blockDelta` blocks |
 
 ## Installation
 
