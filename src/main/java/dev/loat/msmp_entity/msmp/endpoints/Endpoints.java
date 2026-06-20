@@ -29,6 +29,10 @@ import dev.loat.msmp_entity.msmp.endpoints.position.changed.PositionChangedRemov
 import dev.loat.msmp_entity.msmp.endpoints.position.notification.changed.NotificationPositionChanged;
 import dev.loat.msmp_entity.msmp.endpoints.rotation.Rotation;
 import dev.loat.msmp_entity.msmp.endpoints.rotation.RotationSet;
+import dev.loat.msmp_entity.msmp.endpoints.rotation.changed.RotationChanged;
+import dev.loat.msmp_entity.msmp.endpoints.rotation.changed.RotationChangedAdd;
+import dev.loat.msmp_entity.msmp.endpoints.rotation.changed.RotationChangedRemove;
+import dev.loat.msmp_entity.msmp.endpoints.rotation.notification.changed.NotificationRotationChanged;
 import dev.loat.msmp_entity.msmp.endpoints.saturation.Saturation;
 import dev.loat.msmp_entity.msmp.endpoints.saturation.SaturationSet;
 import dev.loat.msmp_entity.msmp.endpoints.uuid.UUID;
@@ -82,6 +86,10 @@ public class Endpoints {
 
         Rotation.register(namespace);
         RotationSet.register(namespace);
+        RotationChanged.register(namespace);
+        RotationChangedAdd.register(namespace);
+        RotationChangedRemove.register(namespace);
+        NotificationRotationChanged.register(namespace, msmpServer);
 
         Saturation.register(namespace);
         SaturationSet.register(namespace);

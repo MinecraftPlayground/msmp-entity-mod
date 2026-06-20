@@ -35,6 +35,9 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 | `entity:position/changed/remove`  | Remove entities from the position change notification tracker                                 |
 | `entity:rotation`                 | Returns the current rotation of any loaded entity by UUID, or a player by name                |
 | `entity:rotation/set`             | Sets the rotation of any loaded entity, preserving its position and dimension                 |
+| `entity:rotation/changed`         | Returns a list of all tracked entities for the rotation changed event                         |
+| `entity:rotation/changed/add`     | Add entities to the rotation change notification tracker                                      |
+| `entity:rotation/changed/remove`  | Remove entities from the rotation change notification tracker                                 |
 | `entity:saturation`               | Returns the current food level and saturation of an online player                             |
 | `entity:saturation/set`           | Partially updates the food level and/or saturation of an online player                        |
 | `entity:uuid`                     | Returns the UUID of an online player by name                                                  |
@@ -43,12 +46,13 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 
 The mod also provides the following MSMP RPC notifications that clients can subscribe to:
 
-| Method                                   | Description                                                    |
-| ---------------------------------------- | -------------------------------------------------------------- |
-| `entity:notification/dimension/changed`  | Fires when a tracked entity changes dimension                  |
-| `entity:notification/health/changed`     | Fires when a tracked LivingEntity's health changes             |
-| `entity:notification/items/changed`      | Fires when a tracked player's inventory or equipment changes   |
+| Method                                   | Description                                                   |
+| ----------------------------------------- | -------------------------------------------------------------- |
+| `entity:notification/dimension/changed`  | Fires when a tracked entity changes dimension                 |
+| `entity:notification/health/changed`     | Fires when a tracked LivingEntity's health changes            |
+| `entity:notification/items/changed`      | Fires when a tracked player's inventory or equipment changes  |
 | `entity:notification/position/changed`   | Fires when a tracked entity moves at least `blockDelta` blocks |
+| `entity:notification/rotation/changed`   | Fires when a tracked entity rotates at least `rotationDelta` degrees |
 
 ## Installation
 
