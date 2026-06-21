@@ -43,6 +43,16 @@ body:
 
     validations:
       required: false
+  
+  - type: textarea
+    id: use-case
+    attributes:
+      label: 'Use Case'
+      description: |
+        Why do you want this? What benefit would that have for you? What tooling, dashboard, or automation would this enable?
+
+    validations:
+      required: true
 
   - type: input
     id: name
@@ -51,7 +61,7 @@ body:
       description: |
         Follow the existing naming convention if this fits an existing family (ex. health, position, items).
 
-      placeholder: 'entity:example or entity:notification/example/changed'
+      placeholder: 'entity:health, entity:position, entity:items, ...'
 
     validations:
       required: true
@@ -64,17 +74,11 @@ body:
         Describe the functionality in detail. What data does it return or accept? Or, for a notification, what event does it represent and when should it fire?
 
       placeholder: |
-        Returns, Sets, Fires when, ...
-
-    validations:
-      required: true
-
-  - type: textarea
-    id: use-case
-    attributes:
-      label: 'Use Case'
-      description: |
-        Why do you want this? What benefit would that have for you? What tooling, dashboard, or automation would this enable?
+        - `entity:health` - Returns the current and maximum health of any LivingEntity
+        - `entity:health/set` - Partially updates the health and/or maximum health of any LivingEntity
+        - `entity:health/changed` - Returns a list of all tracked entities for the health changed event
+        - `entity:health/changed/add` - Add entities to the health change notification tracker
+        - `entity:health/changed/remove` - Remove entities from the health change notification tracker
 
     validations:
       required: true
@@ -83,10 +87,20 @@ body:
     id: example-payload
     attributes:
       label: 'Example request/response/notification payload'
+      render: json
       description: |
         If you have an idea of the JSON shape, share it here. Not required, but it helps a lot.
-
-      render: json
+      
+      placeholder: |
+        {
+          "jsonrpc": "2.0",
+          "method": "entity:health/set",
+          "params": [{
+            "name": "Steve",
+            "health": 15
+          }],
+          "id": 1
+        }
 
     validations:
       required: false
@@ -114,7 +128,7 @@ body:
         - 'Not sure'
 
     validations:
-      required: false
+      required: true
 
   - type: checkboxes
     id: checks
