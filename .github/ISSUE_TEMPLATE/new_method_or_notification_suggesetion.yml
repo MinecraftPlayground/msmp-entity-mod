@@ -1,4 +1,4 @@
-name: 'New Method / Notification Suggestion'
+name: 'New Method/Notification Suggestion'
 description: Suggest a new MSMP RPC method or notification, along with the functionality it should provide.
 title: '[Suggestion] '
 labels: ['enhancement']
@@ -31,6 +31,18 @@ body:
 
     validations:
       required: true
+
+  - type: textarea
+    id: kind-other
+    attributes:
+      label: 'If "Not sure/something else" - please elaborate'
+      description: |
+        Leave this empty if it doesn't apply to you.
+
+      placeholder: ex. a config option, a change to an existing method, something else entirely...
+
+    validations:
+      required: false
 
   - type: input
     id: name
