@@ -98,13 +98,16 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 The mod also provides the following MSMP RPC notifications that clients can subscribe to:
 
 | Method                                    | Description                                                          |
-| ------------------------------------------ | --------------------------------------------------------------------- |
+| ----------------------------------------- | -------------------------------------------------------------------- |
 | `entity:notification/dimension/changed`   | Fires when a tracked entity changes dimension                        |
 | `entity:notification/health/changed`      | Fires when a tracked LivingEntity's health changes                   |
 | `entity:notification/items/changed`       | Fires when a tracked player's inventory or equipment changes         |
 | `entity:notification/position/changed`    | Fires when a tracked entity moves at least `blockDelta` blocks       |
 | `entity:notification/rotation/changed`    | Fires when a tracked entity rotates at least `rotationDelta` degrees |
 | `entity:notification/saturation/changed`  | Fires when a tracked player's food level or saturation changes       |
+
+> If you want more methods or notifications for other purposes, please [open an issue](https://github.com/MinecraftPlayground/msmp-entity-mod/issues/new?template=new_method_or_notification_suggesetion.yml)
+
 
 ## License
 
