@@ -35,6 +35,10 @@ import dev.loat.msmp_entity.msmp.endpoints.rotation.changed.RotationChangedRemov
 import dev.loat.msmp_entity.msmp.endpoints.rotation.notification.changed.NotificationRotationChanged;
 import dev.loat.msmp_entity.msmp.endpoints.saturation.Saturation;
 import dev.loat.msmp_entity.msmp.endpoints.saturation.SaturationSet;
+import dev.loat.msmp_entity.msmp.endpoints.saturation.changed.SaturationChanged;
+import dev.loat.msmp_entity.msmp.endpoints.saturation.changed.SaturationChangedAdd;
+import dev.loat.msmp_entity.msmp.endpoints.saturation.changed.SaturationChangedRemove;
+import dev.loat.msmp_entity.msmp.endpoints.saturation.notification.changed.NotificationSaturationChanged;
 import dev.loat.msmp_entity.msmp.endpoints.uuid.UUID;
 
 import java.util.function.Supplier;
@@ -93,6 +97,10 @@ public class Endpoints {
 
         Saturation.register(namespace);
         SaturationSet.register(namespace);
+        SaturationChanged.register(namespace);
+        SaturationChangedAdd.register(namespace);
+        SaturationChangedRemove.register(namespace);
+        NotificationSaturationChanged.register(namespace, msmpServer);
 
         UUID.register(namespace);
     }

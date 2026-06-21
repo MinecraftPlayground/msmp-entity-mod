@@ -6,6 +6,53 @@ A server-side Fabric mod that extends the [Minecraft Server Management Protocol]
 
 This mod is designed for tooling, dashboards, automation systems, external monitoring tools, and integrations that need structured access to entity information without relying on command parsing or RCON hacks.
 
+
+## Installation
+
+1. Download the mod `.jar` and place it in your server's `mods/` folder.
+2. Enable the Management Server in `server.properties`:
+   ```properties
+   management-server-enabled=true
+   ```
+3. Start the server. The Management Server will listen on `localhost:25576` by default.
+
+
+## Configuration
+
+On first start, the mod generates a configuration file at `<server_root_dir>/config/msmp/entity/config.yml`, where you can tune the notification system for the tracked events that use threshold/interval-based polling:
+
+```yaml
+# Main configuration file for MSMP Entity.
+
+# Configuration for position-related settings.
+position:
+  # Settings for notifications.
+  notification:
+    # Number of server ticks between position change checks for subscribed entities.
+    # Lower values result in more frequent checks and potentially more notifications, but can increase server load.
+    # @default: 20
+    interval-ticks: 20
+    # Minimum distance in blocks that an entity must move to trigger a position change notification.
+    # Setting this to 0.0 will trigger a notification for any movement.
+    # @default: 1.0
+    block-delta: 1.0
+# Configuration for rotation-related settings.
+rotation:
+  # Settings for notifications.
+  notification:
+    # Number of server ticks between rotation change checks for subscribed entities.
+    # Lower values result in more frequent checks and potentially more notifications, but can increase server load.
+    # @default: 20
+    interval-ticks: 20
+    # Minimum change in yaw or pitch, in degrees, that an entity must rotate to trigger a rotation change notification.
+    # Setting this to 0.0 will trigger a notification for any rotation change.
+    # @default: 10.0
+    rotation-delta: 10.0
+```
+
+Lower interval values mean more frequent checks (and potentially more notifications), at the cost of slightly more server load. Setting a delta to `0.0` triggers a notification on any change, however small.
+
+
 ## RPC Methods
 
 The mod currently provides the following MSMP RPC methods. All of these methods are also automatically discoverable through the standard `rpc.discover` MSMP endpoint.
@@ -40,28 +87,24 @@ The mod currently provides the following MSMP RPC methods. All of these methods 
 | `entity:rotation/changed/remove`  | Remove entities from the rotation change notification tracker                                 |
 | `entity:saturation`               | Returns the current food level and saturation of an online player                             |
 | `entity:saturation/set`           | Partially updates the food level and/or saturation of an online player                        |
+| `entity:saturation/changed`       | Returns a list of all tracked entities for the saturation changed event                       |
+| `entity:saturation/changed/add`   | Add players to the saturation change notification tracker                                     |
+| `entity:saturation/changed/remove`| Remove entities from the saturation change notification tracker                               |
 | `entity:uuid`                     | Returns the UUID of an online player by name                                                  |
+
 
 ## RPC Notifications
 
 The mod also provides the following MSMP RPC notifications that clients can subscribe to:
 
-| Method                                   | Description                                                   |
-| ----------------------------------------- | -------------------------------------------------------------- |
-| `entity:notification/dimension/changed`  | Fires when a tracked entity changes dimension                 |
-| `entity:notification/health/changed`     | Fires when a tracked LivingEntity's health changes            |
-| `entity:notification/items/changed`      | Fires when a tracked player's inventory or equipment changes  |
-| `entity:notification/position/changed`   | Fires when a tracked entity moves at least `blockDelta` blocks |
-| `entity:notification/rotation/changed`   | Fires when a tracked entity rotates at least `rotationDelta` degrees |
-
-## Installation
-
-1. Download the mod `.jar` and place it in your server's `mods/` folder.
-2. Enable the Management Server in `server.properties`:
-   ```properties
-   management-server-enabled=true
-   ```
-3. Start the server. The Management Server will listen on `localhost:25576` by default.
+| Method                                    | Description                                                          |
+| ------------------------------------------ | --------------------------------------------------------------------- |
+| `entity:notification/dimension/changed`   | Fires when a tracked entity changes dimension                        |
+| `entity:notification/health/changed`      | Fires when a tracked LivingEntity's health changes                   |
+| `entity:notification/items/changed`       | Fires when a tracked player's inventory or equipment changes         |
+| `entity:notification/position/changed`    | Fires when a tracked entity moves at least `blockDelta` blocks       |
+| `entity:notification/rotation/changed`    | Fires when a tracked entity rotates at least `rotationDelta` degrees |
+| `entity:notification/saturation/changed`  | Fires when a tracked player's food level or saturation changes       |
 
 ## License
 

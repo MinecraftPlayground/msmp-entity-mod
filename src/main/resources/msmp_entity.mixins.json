@@ -4,6 +4,7 @@
   "package": "dev.loat.msmp_entity.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "FoodDataTickMixin",
     "InventoryChangedMixin",
     "LivingEntitySetHealthMixin"
   ],
