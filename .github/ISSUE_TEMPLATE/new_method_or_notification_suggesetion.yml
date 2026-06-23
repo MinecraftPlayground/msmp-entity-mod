@@ -59,9 +59,9 @@ body:
     attributes:
       label: 'Proposed Name'
       description: |
-        Follow the existing naming convention if this fits an existing family (ex. health, position, items).
+        Follow the existing naming convention if this fits an existing family (ex. foo, bar, bazz).
 
-      placeholder: 'entity:health, entity:position, entity:items, ...'
+      placeholder: 'entity:foo, entity:bar, entity:bazz, ...'
 
     validations:
       required: true
@@ -74,11 +74,11 @@ body:
         Describe the functionality in detail. What data does it return or accept? Or, for a notification, what event does it represent and when should it fire?
 
       placeholder: |
-        - `entity:health` - Returns the current and maximum health of any LivingEntity
-        - `entity:health/set` - Partially updates the health and/or maximum health of any LivingEntity
-        - `entity:health/changed` - Returns a list of all tracked entities for the health changed event
-        - `entity:health/changed/add` - Add entities to the health change notification tracker
-        - `entity:health/changed/remove` - Remove entities from the health change notification tracker
+        - `entity:foo` - Get current state of foo
+        - `entity:foo/set` - Set current state of foo
+        - `entity:foo/changed` - Returns a list of all tracked entities for the foo changed event
+        - `entity:foo/changed/add` - Add entities to the foo change notification tracker
+        - `entity:foo/changed/remove` - Remove entities from the foo change notification tracker
 
     validations:
       required: true
@@ -94,10 +94,10 @@ body:
       placeholder: |
         {
           "jsonrpc": "2.0",
-          "method": "entity:health/set",
+          "method": "entity:foo/set",
           "params": [{
             "name": "Steve",
-            "health": 15
+            "foo": 15
           }],
           "id": 1
         }
